@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LensClient</string>
+    <string name="app_hello">Welcome to LensClient</string>
+
+    <string name="menu_connect">Connect</string>
+    <string name="menu_sysmenu">System Menu</string>
+    <string name="menu_help">Help LensClient</string>
+    
+    <string name="worldname">World: </string>
+    <string name="worldurl">Host: </string>
+    <string name="worldip">IP Address: </string>
+    <string name="worldport">Port: </string>
+
+    <string name="charactername">Charater: </string>
+    <string name="characterworld">World: </string>
+    <string name="characterchooseworld">Select World</string>
+    <string name="characterpassword">Pasword: </string>
+
+    <string name="button_send">Send</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_save">Save</string>
+
+    <string name="sysmenu_selectcharacter">Select Character</string>
+    <string name="sysmenu_openworld">Edit Character</string>
+    <string name="sysmenu_editworld">Edit World</string>
+    <string name="sysmenu_loaddb">Load Database</string>
+    <string name="sysmenu_savedb">Save Database</string>
+ 
+</resources>

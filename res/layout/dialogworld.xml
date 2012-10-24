@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogworld"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+ 	<LinearLayout
+	    android:id="@+id/worldname"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    <TextView android:id="@+id/worldnamelable"
+		    android:text="@string/worldname"
+		    android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content" />		    
+		<EditText android:id="@+id/worldnametext"
+		    android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content" />	    
+	</LinearLayout>
+
+	<LinearLayout
+	    android:id="@+id/worldurl"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    <TextView android:id="@+id/worldurllable"
+		    android:text="@string/worldurl"
+		    android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content" />		    
+		<EditText android:id="@+id/worldurltext"
+		    android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content" />	    
+	</LinearLayout>
+
+	<LinearLayout
+	    android:id="@+id/worldip"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    <TextView android:id="@+id/worldiplable"
+		    android:text="@string/worldip"
+		    android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content" />		    
+		<EditText android:id="@+id/worldiptext"
+		    android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content" />	    
+	</LinearLayout>
+	
+	<LinearLayout
+	    android:id="@+id/worldport"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	    <TextView android:id="@+id/worldportlable"
+		    android:text="@string/worldport"
+		    android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content" />		    
+		<EditText android:id="@+id/worldporttext"
+		    android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:inputType="number" />	    
+	</LinearLayout>
+		
+	<Button android:id="@+id/world_savebutton"
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:text="@string/button_save"/>
+	    
+	<Button android:id="@+id/world_cancelbutton"
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:text="@string/button_cancel"/>
+
+		<Button android:id="@+id/world_deletebutton"
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:text="@string/button_delete"/>	
+</LinearLayout>
