@@ -8,6 +8,7 @@ public class ParseMatch {
 	EnumParseType parseType;
 	int	startOffset;
 	String delimiter;
+	boolean matchFragment;
 
 	ParseMatch(int lineCode, String matchString, EnumParseType parseType, int startOffset, String delimiter) {
 		initParseMatch(lineCode, matchString, parseType, startOffset, delimiter);
@@ -27,9 +28,12 @@ public class ParseMatch {
 		this.parseType = parseType; 		
 		this.startOffset = startOffset;
 		this.delimiter = delimiter;
+		this.matchFragment = false;
 	}
+	public boolean isMatchFragment(String string) { return(matchFragment && isMatch(string)); }
 	public boolean isMatch(String string) { return (string.indexOf(matchString, startOffset) == startOffset); }
 	public int getLineCode() { return lineCode; }
+	public void setMatchFragment() { matchFragment = true; }
 
 	public String getField(String line, int fieldNumber, int offset, int length) {
 		ByteBuffer buffer = ByteBuffer.allocate(length + 1); 

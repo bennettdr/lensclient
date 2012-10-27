@@ -23,7 +23,9 @@ public class TableCharacter extends Table {
 	public static final int CHARACTER_DEXERITY_COL =  CHARACTER_WISDOM_COL + 1;
 	public static final int CHARACTER_CONSTITUTION_COL =  CHARACTER_DEXERITY_COL + 1;
 	public static final int CHARACTER_CHARISMA_COL =  CHARACTER_CONSTITUTION_COL + 1;
-	public static final int CHARACTER_BASEHITPOINTS_COL =  CHARACTER_CHARISMA_COL + 1;
+	public static final int CHARACTER_EXPERIENCETOLEVEL_COL =  CHARACTER_CHARISMA_COL + 1;
+	public static final int CHARACTER_EXPERIENCE_COL =  CHARACTER_EXPERIENCETOLEVEL_COL + 1;
+	public static final int CHARACTER_BASEHITPOINTS_COL =  CHARACTER_EXPERIENCE_COL + 1;
 	public static final int CHARACTER_BASEMANAPOINTS_COL =  CHARACTER_BASEHITPOINTS_COL + 1;
 	public static final int CHARACTER_PRACTICES_COL =  CHARACTER_BASEMANAPOINTS_COL + 1;
 	public static final int CHARACTER_TRAINS_COL =  CHARACTER_PRACTICES_COL + 1;
@@ -61,6 +63,8 @@ public class TableCharacter extends Table {
 		"Dexerity", "INTEGER", null,
 		"Constitution", "INTEGER", null,
 		"Charisma", "INTEGER", null,
+		"ExperienceToLevel", "INTEGER", null,
+		"Experience", "INTEGER", null,
 		"BaseHitPoints", "INTEGER", null,
 		"BaseManaPoints", "INTEGER", null,
 		"Practices", "INTEGER", null,
@@ -146,6 +150,8 @@ public class TableCharacter extends Table {
 				characterList[i].setAttribute(EnumAttribute.DEXTERITY, cursor.getInt(cursor.getColumnIndex(columnList[CHARACTER_DEXERITY_COL])));
 				characterList[i].setAttribute(EnumAttribute.CONSTITUTION, cursor.getInt(cursor.getColumnIndex(columnList[CHARACTER_CONSTITUTION_COL])));
 				characterList[i].setAttribute(EnumAttribute.CHARISMA, cursor.getInt(cursor.getColumnIndex(columnList[CHARACTER_CHARISMA_COL])));
+				characterList[i].setExperienceToLevel(cursor.getInt(cursor.getColumnIndex(columnList[CHARACTER_EXPERIENCETOLEVEL_COL])));				
+				characterList[i].setExperience(cursor.getInt(cursor.getColumnIndex(columnList[CHARACTER_EXPERIENCE_COL])));				
 				characterList[i].setBaseHitPoints(cursor.getInt(cursor.getColumnIndex(columnList[CHARACTER_BASEHITPOINTS_COL])));
 				characterList[i].setBaseManaPoints(cursor.getInt(cursor.getColumnIndex(columnList[CHARACTER_BASEMANAPOINTS_COL])));
 				characterList[i].setPractices(cursor.getInt(cursor.getColumnIndex(columnList[CHARACTER_PRACTICES_COL])));
@@ -203,6 +209,8 @@ public class TableCharacter extends Table {
 		values.put(columnList[CHARACTER_DEXERITY_COL], character.getAttribute(EnumAttribute.DEXTERITY));
 		values.put(columnList[CHARACTER_CONSTITUTION_COL], character.getAttribute(EnumAttribute.CONSTITUTION));
 		values.put(columnList[CHARACTER_CHARISMA_COL], character.getAttribute(EnumAttribute.CHARISMA));
+		values.put(columnList[CHARACTER_EXPERIENCETOLEVEL_COL], character.getExperienceToLevel());
+		values.put(columnList[CHARACTER_EXPERIENCE_COL], character.getExperience());
 		values.put(columnList[CHARACTER_BASEHITPOINTS_COL], character.getBaseHitPoints());
 		values.put(columnList[CHARACTER_BASEMANAPOINTS_COL], character.getBaseManaPoints());
 		values.put(columnList[CHARACTER_PRACTICES_COL], character.getPractices());

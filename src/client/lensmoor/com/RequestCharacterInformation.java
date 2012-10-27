@@ -57,9 +57,13 @@ public class RequestCharacterInformation extends Request {
 	}
 
 	@Override
-	public RollingBuffer parseLine(LensClientTelnetHelper telnetHelper, String input_line) {
+	public boolean parseLine(LensClientTelnetHelper telnetHelper, RollingBuffer buffer) {
+		String input_line = buffer.readString();
 		int lineCode;
-		
+		int exp;
+		int exp_to_level;
+		String [] quest_difficulty;
+
 		lineCode = matchLine(input_line);
 		switch (lineCode) {
 			case CHARINFO_NAME_LINE:
@@ -100,27 +104,50 @@ public class RequestCharacterInformation extends Request {
 				character.setAttribute(EnumAttribute.CHARISMA, Integer.parseInt(getField(input_line, lineCode, 2)));
 				break;
 			case CHARINFO_EXP_LINE:
+				exp =  Integer.parseInt(getField(input_line, lineCode, 7));
+				exp_to_level = Integer.parseInt(getField(input_line, lineCode, 7));
+				exp_to_level = (exp - exp_to_level)/character.getLevel();
+				character.setExperience(exp);				
+				character.setExperienceToLevel(exp_to_level);				
+				break;
 			case CHARINFO_HP_LINE:
+				character.setBaseHitPoints(Integer.parseInt(getField(input_line, lineCode, 3)));
+				character.setBaseManaPoints(Integer.parseInt(getField(input_line, lineCode, 6)));
+				break;
 			case CHARINFO_WEALTH_LINE:
 			case CHARINFO_WEIGHT_LINE:
+				break;
 			case CHARINFO_AGE_LINE:
+				character.setAge(Integer.parseInt(getField(input_line, lineCode, 2)));
+				character.setHometown(getField(input_line, lineCode, 2));
+				break;				
 			case CHARINFO_KILLS_LINE:
+				character.setKills(Integer.parseInt(getField(input_line, lineCode, 2)));
+				character.setDeaths(Integer.parseInt(getField(input_line, lineCode, 4)));
+				character.setFleeAt(Integer.parseInt(getField(input_line, lineCode, 6)));
+				break;				
 			case CHARINFO_PK_LINE:
+				character.setPlayerKills(Integer.parseInt(getField(input_line, lineCode, 3)));
+				character.setPlayerDeaths(Integer.parseInt(getField(input_line, lineCode, 6)));
+				break;				
 			case CHARINFO_QP_LINE:
+				character.setQuestPoints(Integer.parseInt(getField(input_line, lineCode, 3)));
+				quest_difficulty = getField(input_line, lineCode, 7).split(".");
+				character.setQuestDifficulty(10 * Integer.parseInt(quest_difficulty[0]) + Integer.parseInt(quest_difficulty[1]));
+				break;				
 			case CHARINFO_LANGUAGES_LINE:
 			case CHARINFO_ADVANTAGES_LINE:
 			case CHARINFO_RP_LINE:
+				break;				
 			case CHARINFO_SKILLCAP_LINE:
+				character.setSkillCap(Integer.parseInt(getField(input_line, lineCode, 10)));
+				setComplete();
+				break;				
 			default:
+				buffer.insertString(input_line);
+				return false;
 		}
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean removeFilter() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

@@ -25,6 +25,7 @@ public class TelnetTransmitter implements Runnable {
 					e.printStackTrace();
 				}
 			} else {
+				LogWriter.write(EnumLogType.TELNET, next_command);
 				Log.i("Sent: ", next_command);
 				telnetHelper.write(next_command);
 			}

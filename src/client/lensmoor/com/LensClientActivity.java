@@ -5,6 +5,7 @@ import java.io.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.Editable;
 import android.view.Menu;
@@ -52,13 +53,15 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 			alertDialog.setCanceledOnTouchOutside(true);
 			alertDialog.show();
 		}
+		LogWriter.setLogInfo(new File(Environment.getExternalStorageDirectory() + "/LensClient/logs/"));
 		savedState = LensClientSavedState.GetSavedState(dbHelper);
 		if (!savedState.getIsNull() && !savedState.getSavedCharacterName().isEmpty()) {
 			Character character = Character.GetCharacter(dbHelper, savedState.getSavedCharacterName(), savedState.getSavedWorldName());;
 			activecharacter.setText(character.getCharacterWorldString());
+			LogWriter.setLogFileName(EnumLogType.TELNET, savedState.getSavedWorldName(), savedState.getSavedCharacterName());
+			LogWriter.setLogFileName(EnumLogType.SYSTEM, savedState.getSavedWorldName(), savedState.getSavedCharacterName());
+			LogWriter.setLogFileName(EnumLogType.DEBUG, savedState.getSavedWorldName(), savedState.getSavedCharacterName());
 		}
-		File logdirectory = new File("/sdcard/LensClient/logs/");
-		logdirectory.mkdirs();
 	}
 
     @Override 
@@ -70,15 +73,19 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
    
     @Override 
 	public boolean onOptionsItemSelected(MenuItem item) {
+    	Character character;
     	switch (item.getItemId()) {
     		case R.id.itemconnect : 
     			outputbox.setText("Connecting...\n");
     			LensClientSavedState savedState = LensClientSavedState.GetSavedState(dbHelper);
     			if(savedState.getSavedWorldName().length() > 0) {
     				World world = dbHelper.GetWorld(savedState.getSavedWorldName());
+        			character = Character.GetCharacter(dbHelper, savedState.getSavedCharacterName(), savedState.getSavedWorldName());
+        			RequestLogin character_login = new RequestLogin (telnetHelper, character);
     				telnetHelper = new LensClientTelnetHelper(world);
     				uiHandler = new MessageHandlerUI(this.getMainLooper(), outputbox);
-    				mainThread = new MainThread(telnetHelper, uiHandler);  
+    				mainThread = new MainThread(telnetHelper, uiHandler);
+    				mainThread.addFilter(character_login);
     				mainThread.start();
    				}
     			break;
@@ -96,7 +103,11 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 	public void onClick(View view) {
 		switch(view.getId()) {
 			case R.id.activecharacter:
-				
+    			LensClientSavedState savedState = LensClientSavedState.GetSavedState(dbHelper);
+    			Character character = Character.GetCharacter(dbHelper, savedState.getSavedCharacterName(), savedState.getSavedWorldName());
+				RequestCharacterInformation char_info = new RequestCharacterInformation (telnetHelper, character);
+				mainThread.addFilter(char_info);
+				char_info.OutboundRequest();
 				break;
 			case R.id.button:
 				Editable inputtext = inputbox.getEditableText();

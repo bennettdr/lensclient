@@ -24,7 +24,7 @@ public class MainThread extends Thread {
 		InterfaceInboundFilter newArray[];
 		int i;
 
-		newArray = new InterfaceInboundFilter [numberOfFilters];
+		newArray = new InterfaceInboundFilter [numberOfFilters + 1];
 
 		for(i = 0; i < numberOfFilters; i++) {
 			newArray[i] = filters[i];
@@ -61,13 +61,12 @@ public class MainThread extends Thread {
 		running = true;
 
 		while(running) {
-			read_string = telnetHelper.readOutputString();
-			if(read_string.length() > 0) {
+			if (!telnetHelper.isOutputEmpty()) {
+				read_string = telnetHelper.readOutputString();
 				messageLoopHandler.sendMessage(messageLoopHandler.obtainMessage(MessageHandlerLoop.OUTPUTMESSAGE, read_string));
 			} else {
-				read_string = telnetHelper.readInputString();
-				if(read_string.length() > 0) {
-					messageLoopHandler.sendMessage(messageLoopHandler.obtainMessage(MessageHandlerLoop.INPUTMESSAGE, read_string));
+				if (!telnetHelper.isInputEmpty()) {
+					processBufferLine(telnetHelper.getInputBuffer());
 				} else {
 					try {
 						TimeUnit.SECONDS.sleep(1);
@@ -80,20 +79,27 @@ public class MainThread extends Thread {
 	}
 
 	public void processBufferLine(RollingBuffer buffer) {
-		int i;
-		String current_string;
-		RollingBuffer replacement_buffer;
-
 		while(!buffer.isEmpty()) {
-			current_string = buffer.readString();
-			i = numberOfFilters;
-			while((i > 0) && (current_string.length() > 0)) {
-				i--;
-				replacement_buffer = filters[i].parseLine(telnetHelper, current_string);
+			processThisBufferLine(buffer, false);
+		}
+		if (buffer.hasFragment()) {
+			processThisBufferLine(buffer, true);
+		}
+	}
+
+	private void processThisBufferLine(RollingBuffer buffer, boolean matchFragment) {
+		int i = numberOfFilters;
+		while(i > 0) {
+			i--;
+			if(filters[i].parseLine(telnetHelper, buffer)) {
 				if(filters[i].removeFilter()) {
 					removeFilter(i);				
 				}
-				processBufferLine(replacement_buffer);
+				i = 0;
+			} else {
+				if ((i == 0) && !buffer.isEmpty()) {
+					messageLoopHandler.sendMessage(messageLoopHandler.obtainMessage(MessageHandlerLoop.INPUTMESSAGE, buffer.readString()));
+				}
 			}
 		}
 	}

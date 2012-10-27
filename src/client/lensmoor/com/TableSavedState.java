@@ -94,7 +94,7 @@ public class TableSavedState extends Table {
 
 		whereClauseOnActiveFlag = "(" + selectColumnList[SAVED_ACTIVE_FLAG] + "= ?)";
 		whereClauseOnWorldName = "(" + selectColumnList[SAVED_WORLD_COL] + "= ?)";
-		
+
 		if(!originalState.getIsNull() && !originalState.getSavedWorldName().equals(savedState.getSavedWorldName())) {
 			whereArgs[0] = originalState.getSavedWorldName();
 			values.put(columnList[SAVED_DATE_UPDATED_COL], savedState.getDateUpdated());
@@ -102,6 +102,13 @@ public class TableSavedState extends Table {
 			values.put(columnList[SAVED_USER_UPDATED_COL], savedState.getUserUpdate());
 			values.put(columnList[SAVED_ACTIVE_FLAG], (int)0);
 			db.update(tableName, values, whereClauseOnWorldName, whereArgs);
+		}
+		if(originalState.getIsNull()
+				|| !originalState.getSavedWorldName().equals(savedState.getSavedWorldName())
+				|| !originalState.getSavedCharacterName().equals(savedState.getSavedCharacterName()) ) {
+			LogWriter.setLogFileName(EnumLogType.TELNET, savedState.getSavedWorldName(), savedState.getSavedCharacterName());
+			LogWriter.setLogFileName(EnumLogType.SYSTEM, savedState.getSavedWorldName(), savedState.getSavedCharacterName());
+			LogWriter.setLogFileName(EnumLogType.DEBUG, savedState.getSavedWorldName(), savedState.getSavedCharacterName());
 		}
 
 		whereArgs[0] = savedState.getSavedWorldName();

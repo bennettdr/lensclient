@@ -1,6 +1,6 @@
 package client.lensmoor.com;
 
 public interface InterfaceInboundFilter {
-	public RollingBuffer parseLine(LensClientTelnetHelper telnetHelper, String input_line);
+	public boolean parseLine(LensClientTelnetHelper telnetHelper, RollingBuffer input_buffer);
 	public boolean removeFilter();
 }

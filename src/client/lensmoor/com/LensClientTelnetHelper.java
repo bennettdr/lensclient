@@ -65,12 +65,17 @@ public class LensClientTelnetHelper {
 		return (connected);
 	}
 
-	public int read() throws IOException { return in.read(); };
+	public int read() throws IOException { return in.read(); }
 	public void write(String output_string) { out.println(output_string); out.println("\r"); out.flush(); }
 	public void disconnect() throws IOException { in.close(); out.close(); telnet.disconnect(); };
 
+	public RollingBuffer getInputBuffer() { return inputBuffer; }
 	public void addInputString(String receivedString) { inputBuffer.writeString(receivedString); };
-	public void addOutputString(String receivedString) { outputBuffer.writeString(receivedString); };
+	public void addInputStringFragment(String new_string, boolean final_fragment) { inputBuffer.writeStringFragment(new_string, final_fragment); }
 	public String readInputString() { return inputBuffer.readString(); };
+	public boolean isInputEmpty() { return inputBuffer.isEmpty() && !inputBuffer.hasFragment(); }
+	
+	public void addOutputString(String receivedString) { outputBuffer.writeString(receivedString); };
 	public String readOutputString() { return outputBuffer.readString(); };
+	public boolean isOutputEmpty() { return outputBuffer.isEmpty(); }
 }

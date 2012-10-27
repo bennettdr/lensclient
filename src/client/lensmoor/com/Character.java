@@ -15,6 +15,8 @@ public class Character extends LensClientSerializedObject {
 	CalendarDate birthday;
 	int age;
 	int attribute[];
+	int experienceToLevel;
+	int experience;
 	int baseHitPoints;
 	int baseManaPoints;
 	int practices;
@@ -58,6 +60,8 @@ public class Character extends LensClientSerializedObject {
 	public CalendarDate getBirthday() { return birthday; }
 	public int getAge() { return age; }
 	public int getAttribute(EnumAttribute attribute) { return this.attribute[attribute.getInt()]; }
+	public int getExperienceToLevel() { return this.experienceToLevel; }
+	public int getExperience() { return this.experience; }
 	public int getBaseHitPoints() { return baseHitPoints; }
 	public int getBaseManaPoints() { return baseManaPoints; }
 	public int getPractices() { return practices; }
@@ -85,6 +89,8 @@ public class Character extends LensClientSerializedObject {
 	public void setBirthday(CalendarDate birthday) { this.birthday = birthday; }
 	public void setAge(int age) { this.age = age; }
 	public void setAttribute(EnumAttribute attribute, int value) { this.attribute[attribute.getInt()] = value; }
+	public void setExperienceToLevel(int experienceToLevel) { this.experienceToLevel = experienceToLevel; }
+	public void setExperience(int experience) { this.experience = experience; }
 	public void setBaseHitPoints(int baseHitPoints) { this.baseHitPoints = baseHitPoints; }
 	public void setBaseManaPoints(int baseManaPoints) { this.baseManaPoints = baseManaPoints; }
 	public void setPractices(int practices) { this.practices = practices; }

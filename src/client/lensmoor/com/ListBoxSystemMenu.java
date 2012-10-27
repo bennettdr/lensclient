@@ -89,7 +89,6 @@ public class ListBoxSystemMenu extends Dialog implements AdapterView.OnItemClick
     			dbHelper.close();
     			try {
     				//Open your local db as the input stream
-    				
     				InputStream myInput = new FileInputStream(loadPath);
     				//Open the empty db as the output stream
     				OutputStream myOutput = new FileOutputStream(dbPath);
