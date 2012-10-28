@@ -66,25 +66,26 @@ public final class R {
     public static final class string {
         public static final int app_hello=0x7f040001;
         public static final int app_name=0x7f040000;
-        public static final int button_cancel=0x7f04000e;
-        public static final int button_delete=0x7f04000f;
-        public static final int button_save=0x7f040010;
-        public static final int button_send=0x7f04000d;
-        public static final int characterchooseworld=0x7f04000b;
-        public static final int charactername=0x7f040009;
-        public static final int characterpassword=0x7f04000c;
-        public static final int characterworld=0x7f04000a;
+        public static final int button_cancel=0x7f04000f;
+        public static final int button_delete=0x7f040010;
+        public static final int button_save=0x7f040011;
+        public static final int button_send=0x7f04000e;
+        public static final int characterchooseworld=0x7f04000c;
+        public static final int charactername=0x7f04000a;
+        public static final int characterpassword=0x7f04000d;
+        public static final int characterworld=0x7f04000b;
         public static final int menu_connect=0x7f040002;
-        public static final int menu_help=0x7f040004;
-        public static final int menu_sysmenu=0x7f040003;
-        public static final int sysmenu_editworld=0x7f040013;
-        public static final int sysmenu_loaddb=0x7f040014;
-        public static final int sysmenu_openworld=0x7f040012;
-        public static final int sysmenu_savedb=0x7f040015;
-        public static final int sysmenu_selectcharacter=0x7f040011;
-        public static final int worldip=0x7f040007;
-        public static final int worldname=0x7f040005;
-        public static final int worldport=0x7f040008;
-        public static final int worldurl=0x7f040006;
+        public static final int menu_disconnect=0x7f040003;
+        public static final int menu_help=0x7f040005;
+        public static final int menu_sysmenu=0x7f040004;
+        public static final int sysmenu_editworld=0x7f040014;
+        public static final int sysmenu_loaddb=0x7f040015;
+        public static final int sysmenu_openworld=0x7f040013;
+        public static final int sysmenu_savedb=0x7f040016;
+        public static final int sysmenu_selectcharacter=0x7f040012;
+        public static final int worldip=0x7f040008;
+        public static final int worldname=0x7f040006;
+        public static final int worldport=0x7f040009;
+        public static final int worldurl=0x7f040007;
     }
 }

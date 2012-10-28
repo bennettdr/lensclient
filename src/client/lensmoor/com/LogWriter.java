@@ -3,7 +3,6 @@ package client.lensmoor.com;
 import java.io.*;
 
 import android.text.format.Time;
-import android.util.Log;
 
 public class LogWriter {
 	static private File directory;

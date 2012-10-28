@@ -19,7 +19,9 @@ public class TelnetReceiver implements Runnable {
 			{ 
 				char_recieved = telnetHelper.read();					
 				c = (char)char_recieved;
-				if ((c == '\n') || (c == '\r')) {
+				if (c == '\r') {
+					// Suppress \r characters
+				} else if (c == '\n') {
 					telnetHelper.addInputStringFragment(java.lang.Character.toString(c), true);
 				} else if (char_recieved > 0) {
 					telnetHelper.addInputStringFragment(java.lang.Character.toString(c), false);

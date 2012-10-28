@@ -4,6 +4,7 @@
     <string name="app_hello">Welcome to LensClient</string>
 
     <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Connect</string>
     <string name="menu_sysmenu">System Menu</string>
     <string name="menu_help">Help LensClient</string>
     

@@ -12,15 +12,14 @@ public class LensClientTelnetHelper {
 	private PrintStream out;
 	private String host = "75.126.141.202";
 	private int port = 3500;
+	private boolean connected;
 
 	private RollingBuffer inputBuffer;
 	private RollingBuffer outputBuffer;
 
 	public LensClientTelnetHelper(World world) {
-		boolean connected = false;
-		
 		if(world.getURL().length() > 0) {
-			connected = initializeTelnetClient(world.getURL(), world.getPort());			
+			initializeTelnetClient(world.getURL(), world.getPort());			
 		}
 		if(!connected) {
 			initializeTelnetClient(world.getIPAddress(), world.getPort());
@@ -35,9 +34,9 @@ public class LensClientTelnetHelper {
 		initializeTelnetClient("", 0);
 	}
 
-	private boolean initializeTelnetClient(String host_ip, int port_no)
+	private void initializeTelnetClient(String host_ip, int port_no)
 	{
-		boolean connected = true;
+		connected = true;
 		
 		inputBuffer = new RollingBuffer();
 		outputBuffer = new RollingBuffer();
@@ -62,12 +61,12 @@ public class LensClientTelnetHelper {
 			connected = false;
 			e.printStackTrace();
 		}
-		return (connected);
 	}
 
 	public int read() throws IOException { return in.read(); }
 	public void write(String output_string) { out.println(output_string); out.println("\r"); out.flush(); }
-	public void disconnect() throws IOException { in.close(); out.close(); telnet.disconnect(); };
+	public void disconnect() throws IOException { in.close(); out.close(); telnet.disconnect(); connected = false; };
+	public boolean isConnected() { return connected; }
 
 	public RollingBuffer getInputBuffer() { return inputBuffer; }
 	public void addInputString(String receivedString) { inputBuffer.writeString(receivedString); };

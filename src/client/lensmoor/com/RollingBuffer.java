@@ -74,6 +74,7 @@ public class RollingBuffer {
 		} else if (fragment && read_fragment) {
 			read_string = stringFragment;
 			stringFragment = "";
+			fragment = false;
 		} else {
 			read_string = "";
 		}
@@ -146,6 +147,7 @@ public class RollingBuffer {
 					bufferList = newList;
 				} else {
 					lowChunk--;
+					bufferList[lowChunk] = new String[bufferChunk];
 				}
 			}
 			readOffset--;

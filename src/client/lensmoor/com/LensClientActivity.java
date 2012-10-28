@@ -67,7 +67,11 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
     @Override 
     public boolean onCreateOptionsMenu(Menu menu) { 
     	MenuInflater inflater = getMenuInflater(); 
-    	inflater.inflate(R.layout.mainmenu, menu); 
+    	inflater.inflate(R.layout.mainmenu, menu);
+    	if ((telnetHelper != null) && telnetHelper.isConnected()) {
+    		MenuItem menu_item = (MenuItem)findViewById(R.id.itemconnect);
+    		menu_item.setTitle(R.string.menu_disconnect);
+    	}
     	return true; 
     } 
    
@@ -75,17 +79,33 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 	public boolean onOptionsItemSelected(MenuItem item) {
     	Character character;
     	switch (item.getItemId()) {
-    		case R.id.itemconnect : 
+    		case R.id.itemconnect :
+    			if ((telnetHelper != null) && telnetHelper.isConnected()) {
+    				try {
+    					telnetHelper.disconnect();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}    	
+    				return true;
+    			}
     			outputbox.setText("Connecting...\n");
     			LensClientSavedState savedState = LensClientSavedState.GetSavedState(dbHelper);
     			if(savedState.getSavedWorldName().length() > 0) {
     				World world = dbHelper.GetWorld(savedState.getSavedWorldName());
         			character = Character.GetCharacter(dbHelper, savedState.getSavedCharacterName(), savedState.getSavedWorldName());
-        			RequestLogin character_login = new RequestLogin (telnetHelper, character);
+        			// Set the telnet and ui interfaces up
     				telnetHelper = new LensClientTelnetHelper(world);
     				uiHandler = new MessageHandlerUI(this.getMainLooper(), outputbox);
+    				// Initialize the main thread
     				mainThread = new MainThread(telnetHelper, uiHandler);
+    				// Make sure these are set so that the default filter is the lowest
+    				// Since its always running and it consumes all information
+        			RequestDefaultDisplay defaultFilter = new RequestDefaultDisplay(telnetHelper, uiHandler);
+        			mainThread.addFilter(defaultFilter);
+        			// Now request to connect
+        			RequestLogin character_login = new RequestLogin (telnetHelper, character);
     				mainThread.addFilter(character_login);
+    				// Startup
     				mainThread.start();
    				}
     			break;
