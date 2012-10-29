@@ -10,13 +10,15 @@ import java.io.OutputStream;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class ListBoxSystemMenu extends Dialog implements AdapterView.OnItemClickListener {
+public class ListBoxSystemMenu extends Dialog implements AdapterView.OnItemClickListener, DialogInterface.OnDismissListener {
 	LensClientDBHelper dbHelper;
 	
 	private static final String stringList[] = {
@@ -66,25 +68,28 @@ public class ListBoxSystemMenu extends Dialog implements AdapterView.OnItemClick
 		ListBoxCharacter choose_character;
     	// Set up for database Save
 		File loadPath = new File(dbHelper.getPath());
-		File dbPath = new File("/sdcard/LensClient/", dbHelper.getDatabaseName());
+		File dbPath = new File(Environment.getExternalStorageDirectory().getPath(), dbHelper.getDatabaseName());
 
 		switch (position) {
 			case selectCharacter:
     			choose_character = new ListBoxCharacter(dbHelper, false, "Choose Character", this.getContext());
+    			choose_character.setOnDismissListener(this);
     			choose_character.show();
 				break;
 			case editCharacter:
     			choose_character = new ListBoxCharacter(dbHelper, true, "Edit Character", this.getContext());
+    			choose_character.setOnDismissListener(this);
     			choose_character.show();
 				break;
 			case editWorld:
     			ListBoxWorld edit_world = new ListBoxWorld (dbHelper, true, "Edit World", this.getContext());
+    			edit_world.setOnDismissListener(this);
     			edit_world.show();
 				break;
     		case loadDatabase:
     			// Load reads from sdcard to protected region
     			dbPath = new File(dbHelper.getPath());
-    			loadPath = new File("/sdcard/LensClient/", dbHelper.getDatabaseName());
+    			loadPath = new File(Environment.getExternalStorageDirectory().getPath(), dbHelper.getDatabaseName());
     		case saveDatabase:
     			dbHelper.close();
     			try {
@@ -120,10 +125,16 @@ public class ListBoxSystemMenu extends Dialog implements AdapterView.OnItemClick
     				alertDialog.setCanceledOnTouchOutside(true);
     				alertDialog.show();
     			}
+    			dismiss();
     			break;
     		default:
+    			dismiss();
     			break;
 		}
+	}
+
+	@Override
+	public void onDismiss(DialogInterface dialog) {
 		dismiss();
 	}
 }

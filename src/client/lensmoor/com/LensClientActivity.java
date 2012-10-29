@@ -110,7 +110,8 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
    				}
     			break;
     		case R.id.itemsystemmenu:
-    			ListBoxSystemMenu system_menu = new ListBoxSystemMenu(dbHelper, "Choose Character", this);
+    			ListBoxSystemMenu system_menu = new ListBoxSystemMenu(dbHelper, "System Menu", this);
+    			system_menu.setOnDismissListener(this);
     			system_menu.show();
     			break;
     		default:

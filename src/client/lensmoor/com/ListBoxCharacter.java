@@ -2,12 +2,13 @@ package client.lensmoor.com;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class ListBoxCharacter extends Dialog implements AdapterView.OnItemClickListener {
+public class ListBoxCharacter extends Dialog implements AdapterView.OnItemClickListener, DialogInterface.OnDismissListener {
 	LensClientDBHelper dbHelper;
 	String [] stringList;
 	int itemCount;
@@ -62,20 +63,26 @@ public class ListBoxCharacter extends Dialog implements AdapterView.OnItemClickL
 			Character [] characterList = dbHelper.GetCharacterList();
 			if (editable) {
 				DialogCharacter dialog_character = new DialogCharacter (dbHelper, parent.getContext(), characterList[position]);
+				dialog_character.setOnDismissListener(this);
 				dialog_character.show();							
 			} else {
 				LensClientSavedState savedState = LensClientSavedState.GetSavedState(dbHelper);
 				savedState.setSavedCharacterName(characterList[position].getCharacterName());
 				savedState.setSavedWorldName(characterList[position].getCharacterWorld());
 				dbHelper.SaveState(savedState);
+				dismiss();
 			}
-			dismiss();
 		} else if (position == itemCount) {
 			DialogCharacter dialog_character = new DialogCharacter(dbHelper, parent.getContext(), null);
+			dialog_character.setOnDismissListener(this);
 			dialog_character.show();
-			dismiss();
 		} else {
 			dismiss();
 		}
+	}
+
+	@Override
+	public void onDismiss(DialogInterface dialog) {
+		dismiss();
 	}
 }
