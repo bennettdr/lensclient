@@ -7,8 +7,8 @@ public class RequestDefaultDisplay extends Request {
 	
 	Handler messageLoopHandler;
 	
-	public RequestDefaultDisplay (LensClientTelnetHelper telnetHelper, Handler messageLoopHandler) {
-		super(telnetHelper);
+	public RequestDefaultDisplay (LensClientTelnetHelper telnetHelper, LensClientDBHelper dbHelper, Handler messageLoopHandler) {
+		super(telnetHelper, dbHelper);
 		this.messageLoopHandler = messageLoopHandler; 
 		setParser(null, DEFAULTDISPLAY_PARSER_SIZE);
 	}

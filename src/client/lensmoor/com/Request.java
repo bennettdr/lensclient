@@ -2,14 +2,16 @@ package client.lensmoor.com;
 
 abstract class Request implements InterfaceInboundFilter {
 	private LensClientTelnetHelper telnetHelper;
+	private LensClientDBHelper dbHelper;
 	private ParseMatch [] matches;
 	private int numberMatches;
 	private boolean complete;
 	
 	abstract void OutboundRequest();
 
-	public Request (LensClientTelnetHelper telnetHelper) {
+	public Request (LensClientTelnetHelper telnetHelper, LensClientDBHelper dbHelper) {
 		this.telnetHelper = telnetHelper;
+		this.dbHelper = dbHelper;
 		this.numberMatches = 0;
 		this.complete = false;
 	}
@@ -87,6 +89,8 @@ abstract class Request implements InterfaceInboundFilter {
 		return strip(inputString, "\\e\\[\\d*\\;?\\d+m");
 	}
 	
+	public LensClientDBHelper getDBHelper() { return dbHelper; }
+
 	
 	@Override
 	public boolean removeFilter() {

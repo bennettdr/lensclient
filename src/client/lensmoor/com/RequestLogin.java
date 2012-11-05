@@ -20,8 +20,8 @@ public class RequestLogin extends Request {
 
 	private Character character;
 
-	public RequestLogin (LensClientTelnetHelper telnetHelper, Character character) {
-		super(telnetHelper);
+	public RequestLogin (LensClientTelnetHelper telnetHelper, LensClientDBHelper dbHelper, Character character) {
+		super(telnetHelper, dbHelper);
 		this.character = character;
 		parser[LOGIN_NAME_LINE].setMatchFragment();
 		parser[LOGIN_PASSWORD_LINE].setMatchFragment();

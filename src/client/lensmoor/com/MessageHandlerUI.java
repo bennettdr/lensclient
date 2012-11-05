@@ -14,18 +14,21 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.BackgroundColorSpan;
 import android.widget.TextView;
+import android.widget.ScrollView;
 
 public class MessageHandlerUI extends Handler {
 	private static final Pattern ansiMatch = Pattern.compile("\\e\\[(\\d+\\;)*\\d+?m");
 	private static final Pattern numberMatch = Pattern.compile("\\d+");
 
+	private ScrollView scrollView;
 	private TextView outputBox;
 	private boolean bold;
-	private String lastAnsiCode = "";
+	private String lastAnsiCode = "\27[0;40;37m";
 
 	public MessageHandlerUI(Looper looper, TextView output_box) {
 		super(looper);
 		outputBox = output_box;
+		scrollView = (ScrollView)outputBox.getParent();
 	}
 	@Override
 	public void handleMessage(Message msg) {
@@ -48,6 +51,7 @@ public class MessageHandlerUI extends Handler {
 				ansiParse.region(ansiParse.end(), message_string.length());
 			}
 		}
+		scrollView.scrollTo(0, outputBox.getHeight());
 	}
 
 	private SpannableString spanAnsiCodes(String text, String ansiCode) {

@@ -83,6 +83,8 @@ public class MainThread extends Thread {
 			processThisBufferLine(buffer, false);
 		}
 		if (buffer.hasFragment()) {
+			LogWriter.write(EnumLogType.DEBUG, buffer.peekString());
+			LogWriter.write(EnumLogType.DEBUG, "\n");
 			processThisBufferLine(buffer, true);
 		}
 	}

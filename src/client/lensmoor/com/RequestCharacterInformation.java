@@ -52,8 +52,8 @@ public class RequestCharacterInformation extends Request {
 
 	private Character character;
 
-	public RequestCharacterInformation (LensClientTelnetHelper telnetHelper, Character character) {
-		super(telnetHelper);
+	public RequestCharacterInformation (LensClientTelnetHelper telnetHelper, LensClientDBHelper dbHelper, Character character) {
+		super(telnetHelper, dbHelper);
 		this.character = character;
 		setParser(parser, CHARINFO_PARSER_SIZE);
 	}
@@ -62,6 +62,7 @@ public class RequestCharacterInformation extends Request {
 	public boolean parseLine(LensClientTelnetHelper telnetHelper, RollingBuffer buffer) {
 		String raw_input_line = buffer.readString();
 		String input_line = stripAnsiCodes(raw_input_line);
+		String month;
 		int lineCode;
 		int exp;
 		int exp_to_level;
@@ -81,8 +82,13 @@ public class RequestCharacterInformation extends Request {
 				character.setClan(getField(input_line, lineCode, 5));
 				break;
 			case CHARINFO_BIRTHDAY_LINE:
+				// Strip off comma in month name
+				month =  getField(input_line, lineCode, 13);
+				if(month.charAt(month.length()-1) == ',') {
+					month = month.substring(0, month.length() - 1);
+				}
 				character.setBirthday(new CalendarDate(getIntField(input_line, lineCode, 15),
-						EnumCalendarMonths.getCalendarMonth(getField(input_line, lineCode, 13)),
+						EnumCalendarMonths.getCalendarMonth(month),
 						getIntField(input_line, lineCode, 7)));
 				break;
 			case CHARINFO_STR_LINE:
@@ -122,7 +128,7 @@ public class RequestCharacterInformation extends Request {
 				break;
 			case CHARINFO_AGE_LINE:
 				character.setAge(getIntField(input_line, lineCode, 1));
-				character.setHometown(getField(input_line, lineCode, 4));
+				character.setHometown(getField(input_line, lineCode, 5));
 				break;				
 			case CHARINFO_KILLS_LINE:
 				character.setKills(getIntField(input_line, lineCode, 1));
@@ -145,6 +151,7 @@ public class RequestCharacterInformation extends Request {
 			case CHARINFO_SKILLCAP_LINE:
 				character.setSkillCap(getIntField(input_line, lineCode, 9));
 				setComplete();
+				getDBHelper().SaveCharacter(character);
 				break;				
 			case CHARINFO_CONTINUE_LINE:
 				telnetHelper.addOutputString("\n");

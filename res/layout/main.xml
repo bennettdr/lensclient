@@ -4,40 +4,31 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-		android:id="@+id/activecharacter"
+    <TextView android:id="@+id/activecharacter"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/app_hello" />
     
-	<EditText
-		android:layout_width="fill_parent"
+	<ScrollView android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:fillViewport = "true"
+		android:orientation="vertical"
+		android:layout_weight="1.0" >
+
+	    <TextView android:id="@+id/outputbox"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/app_hello" />
+	</ScrollView>
+	
+	<EditText android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
 		android:id="@+id/inputbox" />
 
-	<Button
-		android:layout_width="fill_parent"
+	<Button android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical" 
 		android:text="@string/button_send"
 		android:id="@+id/button" />
-		
-	<ScrollView
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical" >
-
-		<LinearLayout
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="vertical" >
-
-		    <TextView
-				android:id="@+id/outputbox"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/app_hello" />
-		</LinearLayout>
-	</ScrollView>
 </LinearLayout>

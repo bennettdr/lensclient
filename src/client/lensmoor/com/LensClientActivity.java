@@ -100,10 +100,10 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
     				mainThread = new MainThread(telnetHelper, uiHandler);
     				// Make sure these are set so that the default filter is the lowest
     				// Since its always running and it consumes all information
-        			RequestDefaultDisplay defaultFilter = new RequestDefaultDisplay(telnetHelper, uiHandler);
+        			RequestDefaultDisplay defaultFilter = new RequestDefaultDisplay(telnetHelper, dbHelper, uiHandler);
         			mainThread.addFilter(defaultFilter);
         			// Now request to connect
-        			RequestLogin character_login = new RequestLogin (telnetHelper, character);
+        			RequestLogin character_login = new RequestLogin (telnetHelper, dbHelper, character);
     				mainThread.addFilter(character_login);
     				// Startup
     				mainThread.start();
@@ -126,7 +126,7 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 			case R.id.activecharacter:
     			LensClientSavedState savedState = LensClientSavedState.GetSavedState(dbHelper);
     			Character character = Character.GetCharacter(dbHelper, savedState.getSavedCharacterName(), savedState.getSavedWorldName());
-				RequestCharacterInformation char_info = new RequestCharacterInformation (telnetHelper, character);
+				RequestCharacterInformation char_info = new RequestCharacterInformation (telnetHelper, dbHelper, character);
 				mainThread.addFilter(char_info);
 				char_info.OutboundRequest();
 				break;
@@ -134,6 +134,7 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 				Editable inputtext = inputbox.getEditableText();
 				telnetHelper.addOutputString(inputtext.toString());
 				inputbox.setText("");
+				inputbox.clearFocus();
 				break;
 		}
 	}

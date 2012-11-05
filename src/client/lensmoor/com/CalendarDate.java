@@ -26,6 +26,30 @@ public class CalendarDate {
 	public long getCalendarDateAsLong() {
 		return (10000 * year + 100 * month.getInt() + date);
 	}
+	
+	public String toString() {
+		String return_string;
+		String ext;
+		switch(date) {
+			case 1:
+			case 21:
+			case 31:
+				ext = "st";
+				break;
+			case 2:
+			case 22:
+				ext = "nd";
+				break;
+			default:
+				ext = "th";
+				break;
+		}
+		return_string = "Day of " + EnumCalendarDays.getCalendarDay(date % 7 + 1);
+		return_string = return_string + ", " + Integer.toString(date) + ext;
+		return_string = return_string + " of the Month of the " + month.getString();
+		return_string = return_string + ", Year " + Integer.toString(year) + ".";
+		return return_string;
+	}
 }
 
 //2 RL minutes  = 1 game hour

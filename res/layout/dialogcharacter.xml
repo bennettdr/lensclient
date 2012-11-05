@@ -1,68 +1,399 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialogcharacter"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-    
- 	<LinearLayout
-	    android:id="@+id/charactername"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-	    <TextView android:id="@+id/characternamelable"
-		    android:text="@string/charactername"
-		    android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content" />		    
-		<EditText android:id="@+id/characternametext"
-		    android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content" />	    
-	</LinearLayout>
-
-	<LinearLayout
-	    android:id="@+id/characterurl"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-	    <TextView android:id="@+id/characterworldlable"
-		    android:text="@string/characterworld"
-		    android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content" />		    
-	    <TextView android:id="@+id/characterworldtext"
-		    android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content" />		    
-	    <Button android:id="@+id/character_worldbutton"
-		    android:layout_height="wrap_content"
-	    	android:layout_width="wrap_content"
-	    	android:text="@string/characterchooseworld"/>	 
-	</LinearLayout>
-
-	<LinearLayout
-	    android:id="@+id/characterip"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="horizontal" >
-	    <TextView android:id="@+id/characterpasswordlable"
-		    android:text="@string/characterpassword"
-		    android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content" />		    
-		<EditText android:id="@+id/characterpasswordtext"
-		    android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content" />	    
-	</LinearLayout>
-			
+ 
+    <TextView android:id="@+id/characternamelabel"
+ 		android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+        android:text="@string/charactername" />
+    <EditText android:id="@+id/characternametext"
+ 		android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/characternamelabel"
+        android:layout_toRightOf="@id/characternamelabel" />
+	<TextView android:id="@+id/characterworldlabel"
+ 		android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content" 
+		android:layout_toRightOf="@id/characternametext" 
+		android:text="@string/characterworld" />
+	<TextView android:id="@+id/characterworldtext"
+ 		android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content" 
+        android:layout_alignBottom="@id/characternamelabel"
+		android:layout_toRightOf="@id/characterworldlabel" />
+	<Button android:id="@+id/character_worldbutton"
+ 		android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content" 
+	    android:layout_alignParentRight="true"
+	    android:text="@string/characterchooseworld" />
+	
+	<!-- Password -->	
+    <TextView android:id="@+id/characterpasswordlabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterpassword"
+ 		android:layout_below="@id/characternamelabel"
+ 		android:layout_alignParentLeft="true" />
+    <EditText android:id="@+id/characterpasswordtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/characterpasswordlabel"
+ 		android:layout_below="@id/characternamelabel"
+ 		android:layout_alignLeft="@id/characternametext"
+ 		android:layout_alignRight="@id/characternametext"
+        android:layout_toRightOf="@id/characterpasswordlabel" />
+		<!-- Buttons (save, delete, cancel -->
 	<Button android:id="@+id/character_savebutton"
-	    android:layout_height="wrap_content"
 	    android:layout_width="wrap_content"
-	    android:text="@string/button_save"/>
-	    
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@id/character_worldbutton"
+	    android:text="@string/button_save" />
 	<Button android:id="@+id/character_cancelbutton"
 	    android:layout_height="wrap_content"
 	    android:layout_width="wrap_content"
-	    android:text="@string/button_cancel"/>
-
-		<Button android:id="@+id/character_deletebutton"
+	    android:text="@string/button_cancel"
+		android:layout_below="@id/character_worldbutton"
+	    android:layout_centerHorizontal="true"/>
+	<Button android:id="@+id/character_deletebutton"
 	    android:layout_height="wrap_content"
 	    android:layout_width="wrap_content"
-	    android:text="@string/button_delete"/>	
-</LinearLayout>
+	    android:text="@string/button_delete"
+		android:layout_below="@id/character_worldbutton"
+		android:layout_alignParentRight="true" />
+
+	<!-- Level, Sex, Race -->	
+    <TextView android:id="@+id/characterlevellabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterlevel"
+		android:layout_below="@id/character_savebutton"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characterlevelvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/character_savebutton"
+ 		android:layout_toRightOf="@id/characterlevellabel" />
+    <TextView android:id="@+id/charactersexlabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/charactersex"
+		android:layout_below="@id/character_savebutton"
+ 		android:layout_alignLeft="@id/characterworldlabel" />
+    <TextView android:id="@+id/charactersexvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXX"
+		android:layout_below="@id/character_savebutton"
+ 		android:layout_toRightOf="@id/charactersexlabel" />
+    <!-- Have to reverse values and labels when right justifying -->
+    <TextView android:id="@+id/characterracevalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXX"
+		android:layout_below="@id/character_savebutton"
+ 		android:layout_alignParentRight="true" />
+    <TextView android:id="@+id/characterracelabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterrace"
+		android:layout_below="@id/character_savebutton"
+ 		android:layout_toLeftOf="@id/characterracevalue" />
+    
+	<!-- Size, Specialization, Clan -->	
+    <TextView android:id="@+id/charactersizelabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/charactersize"
+		android:layout_below="@id/characterlevellabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/charactersizevalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characterlevellabel"
+ 		android:layout_toRightOf="@id/charactersizelabel" />
+    <TextView android:id="@+id/characterspecializelabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterspecialize"
+		android:layout_below="@id/characterlevellabel"
+ 		android:layout_alignLeft="@id/characterworldlabel" />
+    <TextView android:id="@+id/characterspecializevalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXX"
+		android:layout_below="@id/characterlevellabel"
+ 		android:layout_toRightOf="@id/characterspecializelabel" />
+    <!-- Have to reverse values and labels when right justifying -->
+    <TextView android:id="@+id/characterclanvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXX"
+		android:layout_below="@id/characterlevellabel"
+ 		android:layout_alignParentRight="true" />
+    <TextView android:id="@+id/characterclanlabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterclan"
+		android:layout_below="@id/characterlevellabel"
+ 		android:layout_toLeftOf="@id/characterclanvalue" />
+    
+	<!-- Day of Week, Birthday -->	
+    <TextView android:id="@+id/characterbirthdayvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+		android:layout_below="@id/charactersizelabel"
+ 		android:layout_alignParentLeft="true" />
+
+	<!-- Blank Line -->	
+    <TextView android:id="@+id/characterblankline1"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+		android:layout_below="@id/characterbirthdayvalue"
+ 		android:layout_alignParentLeft="true" />
+
+	<!-- Strength, Practices -->	
+    <TextView android:id="@+id/characterstrengthlabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterstrength"
+		android:layout_below="@id/characterblankline1"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characterstrengthvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characterblankline1"
+ 		android:layout_toRightOf="@id/characterstrengthlabel" />
+    <TextView android:id="@+id/characterpracticeslabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterpractices"
+		android:layout_below="@id/characterblankline1"
+ 		android:layout_alignLeft="@id/characterworldlabel" />
+    <TextView android:id="@+id/characterpracticesvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXX"
+		android:layout_below="@id/characterblankline1"
+ 		android:layout_toRightOf="@id/characterpracticeslabel" />
+
+	<!-- Intelligence, Trains -->	
+    <TextView android:id="@+id/characterintelligencelabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterintellegence"
+		android:layout_below="@id/characterstrengthlabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characterintelligencevalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characterstrengthlabel"
+ 		android:layout_toRightOf="@id/characterintelligencelabel" />
+    <TextView android:id="@+id/charactertrainslabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/charactertrains"
+		android:layout_below="@id/characterstrengthlabel"
+ 		android:layout_alignLeft="@id/characterworldlabel" />
+    <TextView android:id="@+id/charactertrainsvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXX"
+		android:layout_below="@id/characterstrengthlabel"
+ 		android:layout_toRightOf="@id/charactertrainslabel" />
+    
+	<!-- Wisdom, Align -->	
+    <TextView android:id="@+id/characterwisdomlabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterwisdom"
+		android:layout_below="@id/characterintelligencelabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characterwisdomvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characterintelligencelabel"
+ 		android:layout_toRightOf="@id/characterwisdomlabel" />
+    <TextView android:id="@+id/characteralignlabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characteralign"
+		android:layout_below="@id/characterintelligencelabel"
+ 		android:layout_alignLeft="@id/charactersexlabel" />
+    <TextView android:id="@+id/characteralignvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXX"
+		android:layout_below="@id/characterintelligencelabel"
+ 		android:layout_toRightOf="@id/characteralignlabel" />
+    
+	<!-- Dexterity -->	
+    <TextView android:id="@+id/characterdexteritylabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterdexterity"
+		android:layout_below="@id/characterwisdomlabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characterdexterityvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characterwisdomlabel"
+ 		android:layout_toRightOf="@id/characterdexteritylabel" />
+    
+	<!-- Constitution -->	
+    <TextView android:id="@+id/characterconstitutionlabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterconstitution"
+		android:layout_below="@id/characterdexteritylabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characterconstitutionvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characterdexteritylabel"
+ 		android:layout_toRightOf="@id/characterconstitutionlabel" />
+
+	<!-- Charisma -->	
+    <TextView android:id="@+id/charactercharismalabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/charactercharisma"
+		android:layout_below="@id/characterconstitutionlabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/charactercharismavalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characterconstitutionlabel"
+ 		android:layout_toRightOf="@id/charactercharismalabel" />
+
+	<!-- Experience To Level, Experience -->	
+    <TextView android:id="@+id/charactertonextlevellabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/charactertonextlevel"
+		android:layout_below="@id/charactercharismalabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/charactertonextlevelvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/charactercharismalabel"
+ 		android:layout_toRightOf="@id/charactertonextlevellabel" />
+    <TextView android:id="@+id/characterexperiencelabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterexperience"
+		android:layout_below="@id/charactercharismalabel"
+ 		android:layout_toRightOf="@id/charactersexlabel" />
+    <TextView android:id="@+id/characterexperiencevalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXX"
+		android:layout_below="@id/charactercharismalabel"
+ 		android:layout_toRightOf="@id/characterexperiencelabel" />
+    
+	<!-- Blank Line -->	
+    <TextView android:id="@+id/characterblankline2"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+		android:layout_below="@id/charactertonextlevellabel"
+ 		android:layout_alignParentLeft="true" />
+
+	<!-- HP, MP -->	
+    <TextView android:id="@+id/characterbasehplabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterbasehp"
+		android:layout_below="@id/characterblankline2"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characterbasehpvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXX"
+		android:layout_below="@id/characterblankline2"
+ 		android:layout_toRightOf="@id/characterbasehplabel" />
+    <TextView android:id="@+id/characterbasemplabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterbasemp"
+		android:layout_below="@id/characterblankline2"
+		android:layout_alignLeft="@id/charactersexlabel" />
+    <TextView android:id="@+id/characterbasempvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXX"
+		android:layout_below="@id/characterblankline2"
+ 		android:layout_toRightOf="@+id/characterbasemplabel"/>
+    
+	<!-- Age, Hometown -->	
+    <TextView android:id="@+id/characteragelabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterage"
+		android:layout_below="@id/characterbasehplabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characteragevalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characterbasehplabel"
+ 		android:layout_toRightOf="@id/characteragelabel" />
+    <TextView android:id="@+id/characterhometownlabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterhometown"
+		android:layout_below="@id/characterbasehplabel"
+		android:layout_alignLeft="@id/charactersexlabel"/>
+    <TextView android:id="@+id/characterhometownvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XXXXXX"
+		android:layout_below="@id/characterbasehplabel"
+ 		android:layout_toRightOf="@+id/characterhometownlabel" />
+    
+    <TextView android:id="@+id/characterkillslabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterkills"
+		android:layout_below="@id/characteragelabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characterkillsvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characteragelabel"
+ 		android:layout_toRightOf="@id/characterkillslabel" />
+
+    <TextView android:id="@+id/characterplayerkillslabel"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="@string/characterplayerkills"
+		android:layout_below="@id/characterkillslabel"
+ 		android:layout_alignParentLeft="true" />
+    <TextView android:id="@+id/characterplayerkillsvalue"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:text="XX"
+		android:layout_below="@id/characterkillslabel"
+ 		android:layout_toRightOf="@id/characterplayerkillslabel" />
+    
+</RelativeLayout>
+    
+    

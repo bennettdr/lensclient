@@ -13,11 +13,40 @@
     <string name="worldip">IP Address: </string>
     <string name="worldport">Port: </string>
 
-    <string name="charactername">Charater: </string>
+    <string name="charactername">Character: </string>
     <string name="characterworld">World: </string>
     <string name="characterchooseworld">Select World</string>
-    <string name="characterpassword">Pasword: </string>
+    <string name="characterpassword">Password: </string>
 
+    <string name="characterlevel">Level: </string>
+    <string name="charactersex">Sex: </string>
+    <string name="characterrace">Race: </string>
+    <string name="charactersize">Size: </string>
+    <string name="characterspecialize">Specialize: </string>
+    <string name="characterclan">Clan: </string>
+    <string name="characterstrength">Str: </string>
+    <string name="characterpractices">Practices: </string>
+    <string name="characterintellegence">Int: </string>
+    <string name="charactertrains">Trains: </string>
+    <string name="characterwisdom">Wis: </string>
+    <string name="characteralign">Align: </string>
+    <string name="characterdexterity">Dex: </string>
+    <string name="characterconstitution">Con: </string>
+    <string name="charactercharisma">Cha: </string>
+    <string name="charactertonextlevel">Exp for level: </string>
+    <string name="characterexperience">Exp Total: </string>
+    <string name="characterbasehp">Base HP: </string>
+    <string name="characterbasemp">Base MP: </string>
+    <string name="characterage">Age: </string>
+    <string name="characterhometown">Hometown: </string>
+    <string name="characterkills">Kills: </string>
+    <string name="characterdeaths">Deaths: </string>
+    <string name="characterfleeat">Wimpy: </string>
+    <string name="characterplayerkills">Player Kills: </string>
+    <string name="characterplayerdeaths">Player Deaths: </string>
+    <string name="characterquestpoints">Quest Points: </string>
+    <string name="characterdifficulty">Quest Difficulty: </string>
+    
     <string name="button_send">Send</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
