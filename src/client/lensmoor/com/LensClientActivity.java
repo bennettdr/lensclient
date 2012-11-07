@@ -77,7 +77,9 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
    
     @Override 
 	public boolean onOptionsItemSelected(MenuItem item) {
+    	LensClientSavedState savedState;
     	Character character;
+    	
     	switch (item.getItemId()) {
     		case R.id.itemconnect :
     			if ((telnetHelper != null) && telnetHelper.isConnected()) {
@@ -89,10 +91,11 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
     				return true;
     			}
     			outputbox.setText("Connecting...\n");
-    			LensClientSavedState savedState = LensClientSavedState.GetSavedState(dbHelper);
+    			savedState = LensClientSavedState.GetSavedState(dbHelper);
     			if(savedState.getSavedWorldName().length() > 0) {
     				World world = dbHelper.GetWorld(savedState.getSavedWorldName());
         			character = Character.GetCharacter(dbHelper, savedState.getSavedCharacterName(), savedState.getSavedWorldName());
+        			outputbox.append("Character Name"+character.getCharacterName()+"\n");
         			// Set the telnet and ui interfaces up
     				telnetHelper = new LensClientTelnetHelper(world);
     				uiHandler = new MessageHandlerUI(this.getMainLooper(), outputbox);
@@ -113,6 +116,12 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
     			ListBoxSystemMenu system_menu = new ListBoxSystemMenu(dbHelper, "System Menu", this);
     			system_menu.setOnDismissListener(this);
     			system_menu.show();
+    			break;
+    		case R.id.menu_help:
+    			savedState = LensClientSavedState.GetSavedState(dbHelper);
+    			character = Character.GetCharacter(dbHelper, savedState.getSavedCharacterName(), savedState.getSavedWorldName());
+    			DisplayCharacter displayCharacter = new DisplayCharacter(dbHelper, this, character);
+    			displayCharacter.show();
     			break;
     		default:
     			return super.onOptionsItemSelected(item);

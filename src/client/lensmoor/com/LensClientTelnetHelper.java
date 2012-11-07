@@ -36,7 +36,7 @@ public class LensClientTelnetHelper {
 
 	private void initializeTelnetClient(String host_ip, int port_no)
 	{
-		connected = true;
+		connected = false;
 		
 		inputBuffer = new RollingBuffer();
 		outputBuffer = new RollingBuffer();
@@ -47,6 +47,10 @@ public class LensClientTelnetHelper {
 		if (host_ip.length() > 0) {
 			host = host_ip;
 		}
+	}
+	
+	public boolean start() {
+		connected = true;
 		telnet = new TelnetClient(); 
 		try {
 			telnet.connect(host, port);
@@ -61,6 +65,7 @@ public class LensClientTelnetHelper {
 			connected = false;
 			e.printStackTrace();
 		}
+		return connected;
 	}
 
 	public int read() throws IOException { return in.read(); }

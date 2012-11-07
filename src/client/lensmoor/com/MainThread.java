@@ -60,6 +60,8 @@ public class MainThread extends Thread {
 		setName("Main Thread");
 		running = true;
 
+		running = telnetHelper.start();
+
 		while(running) {
 			if (!telnetHelper.isOutputEmpty()) {
 				read_string = telnetHelper.readOutputString();

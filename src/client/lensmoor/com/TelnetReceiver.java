@@ -63,7 +63,7 @@ public class TelnetReceiver implements Runnable {
 		} else if ((ansiState == ANSISTATE_ESCAPESEEN) && (c == ANSI_BRACKET)) {
 			// Continue escape processing - seen escape and bracket
 			ansiState = ANSISTATE_BRACKETSEEN;
-		} else if ((ansiState == ANSISTATE_BRACKETSEEN) && (((c >= '0') && (c <= '9')) || (c != ';'))) {
+		} else if ((ansiState == ANSISTATE_BRACKETSEEN) && (((c >= '0') && (c <= '9')) || (c == ';'))) {
 			// Continue escape processing - seen escape and bracket and numbers or semi-colons
 			// Continue to add characters to ansi code string
 		} else {
