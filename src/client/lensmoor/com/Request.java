@@ -5,15 +5,19 @@ abstract class Request implements InterfaceInboundFilter {
 	private LensClientDBHelper dbHelper;
 	private ParseMatch [] matches;
 	private int numberMatches;
+	private boolean started;
 	private boolean complete;
 	
-	abstract void OutboundRequest();
+	void OutboundRequest() {
+		started = true;
+	}
 
 	public Request (LensClientTelnetHelper telnetHelper, LensClientDBHelper dbHelper) {
 		this.telnetHelper = telnetHelper;
 		this.dbHelper = dbHelper;
 		this.numberMatches = 0;
 		this.complete = false;
+		this.started = false;
 	}
 
 	private String strip(String inputString, String regex) {
@@ -38,6 +42,8 @@ abstract class Request implements InterfaceInboundFilter {
 	}
 	
 	public void setComplete() { complete = true; }
+	public boolean isStarted() { return started; }
+	public boolean isComplete() { return complete; }
 
 	public int matchLine(String line) {
 		int match_number;

@@ -14,7 +14,8 @@
         	android:text="@string/charactername" />
 	    <EditText android:id="@+id/characternametext"
     	    android:layout_width="wrap_content"
- 			android:layout_height="wrap_content" />
+ 			android:layout_height="wrap_content"
+ 			android:hint="@string/characternamehint" />
 	</LinearLayout>
     <!-- World -->
     <LinearLayout android:layout_width="fill_parent"
@@ -43,7 +44,8 @@
  			android:text="@string/characterpassword" />
 	    <EditText android:id="@+id/characterpasswordtext"
 	        android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content" />
+    	    android:layout_height="wrap_content"
+    	    android:hint="@string/characterpasswordhint" />
 	</LinearLayout>
 	
     <!-- Filler -->

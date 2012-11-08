@@ -29,6 +29,7 @@ public class RequestDefaultDisplay extends Request {
 
 	@Override
 	void OutboundRequest() {
+		super.OutboundRequest();
 	}
 
 }

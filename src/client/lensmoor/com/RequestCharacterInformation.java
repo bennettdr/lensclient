@@ -47,7 +47,7 @@ public class RequestCharacterInformation extends Request {
 		new ParseMatch(CHARINFO_ADVANTAGES_LINE, "Advantages/Disadvantages:", EnumParseType.WHITESPACE),
 		new ParseMatch(CHARINFO_RP_LINE, "RP points:", EnumParseType.WHITESPACE),
 		new ParseMatch(CHARINFO_SKILLCAP_LINE, "You have ", EnumParseType.WHITESPACE),
-		new ParseMatch(CHARINFO_CONTINUE_LINE, "[Hit Return to continue, Q to exit]]", EnumParseType.WHITESPACE)
+		new ParseMatch(CHARINFO_CONTINUE_LINE, "[Hit Return to continue, Q to exit]", EnumParseType.WHITESPACE)
 	};
 
 	private Character character;
@@ -165,6 +165,7 @@ public class RequestCharacterInformation extends Request {
 
 	@Override
 	void OutboundRequest() {
+		super.OutboundRequest();
 		write("score");
 	}
 

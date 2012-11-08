@@ -48,11 +48,11 @@ public class DialogCharacter extends Dialog implements View.OnClickListener, Dia
 
 		if (!character.getIsNull()) {
 			EditText nameEditText = (EditText)view.findViewById(R.id.characternametext);
-			nameEditText.setHint(character.getCharacterName());
+			nameEditText.setText(character.getCharacterName());
 			TextView worldTextView = (TextView)view.findViewById(R.id.characterworldtext);
 			worldTextView.setText(character.getCharacterWorld());
 			EditText passowrdEditText = (EditText)view.findViewById(R.id.characterpasswordtext);
-			passowrdEditText.setHint(character.getPassword());
+			passowrdEditText.setText(character.getPassword());
 		}
 
 		Button chooseWorldButton = (Button)view.findViewById(R.id.character_worldbutton);

@@ -1,47 +1,37 @@
 package client.lensmoor.com;
 
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
 import android.os.Looper;
 import android.os.Handler;
 import android.os.HandlerThread;
 
 public class MainThread extends Thread {
-	LensClientTelnetHelper telnetHelper;
-	Handler messageLoopHandler;
-	Handler uiHandler;
-	private InterfaceInboundFilter filters[];
+	private LensClientDBHelper dbHelper;
+	private LensClientTelnetHelper telnetHelper;
+	private Handler messageLoopHandler;
+	private Handler uiHandler;
 	private boolean running;
-	int numberOfFilters;
+	private ArrayList<Request> pendingRequests;
+	private ArrayList<InterfaceInboundFilter>activeFilters;
 	
-	public MainThread(LensClientTelnetHelper telnet_helper, Handler handler) {
+	public MainThread(LensClientDBHelper db_helper, LensClientTelnetHelper telnet_helper, Handler handler) {
 		super("Main Thread");
+		dbHelper = db_helper;
 		telnetHelper = telnet_helper;
 		uiHandler = handler;
+		activeFilters = new ArrayList<InterfaceInboundFilter>();
+		pendingRequests = new ArrayList<Request>();
 	}
 
-	public void addFilter(InterfaceInboundFilter new_filter) {
-		InterfaceInboundFilter newArray[];
-		int i;
-
-		newArray = new InterfaceInboundFilter [numberOfFilters + 1];
-
-		for(i = 0; i < numberOfFilters; i++) {
-			newArray[i] = filters[i];
-		}
-		newArray[i] = new_filter;
-		filters = newArray;
-		numberOfFilters++;
+	public void addFilter(Request new_filter) {
+		activeFilters.add(new_filter);
+		new_filter.OutboundRequest();
 	}
 
 	public void removeFilter(int filter_offset) {
-		int i;
-
-		for(i = filter_offset; i < numberOfFilters - 1; i++) {
-			filters[i] = filters[i + 1];
-		}
-		numberOfFilters--;
-		filters[i] = null;
+		activeFilters.remove(filter_offset);
 	}
 
 	public void run() {
@@ -61,6 +51,7 @@ public class MainThread extends Thread {
 		running = true;
 
 		running = telnetHelper.start();
+		startUpRequests();
 
 		while(running) {
 			if (!telnetHelper.isOutputEmpty()) {
@@ -70,14 +61,42 @@ public class MainThread extends Thread {
 				if (!telnetHelper.isInputEmpty()) {
 					processBufferLine(telnetHelper.getInputBuffer());
 				} else {
-					try {
-						TimeUnit.SECONDS.sleep(1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					if (pendingRequests.size() > 0) {
+						if (pendingRequests.get(0).isComplete()) {
+							pendingRequests.remove(0);
+						} else if (!pendingRequests.get(0).isStarted()) {
+							addFilter(pendingRequests.get(0));
+						}
+					} else {
+						try {
+							TimeUnit.SECONDS.sleep(1);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
 		}
+	}
+	
+	private void startUpRequests() {
+    	LensClientSavedState savedState;
+    	Character character;
+
+		savedState = LensClientSavedState.GetSavedState(dbHelper);
+		character = Character.GetCharacter(dbHelper, savedState.getSavedCharacterName(), savedState.getSavedWorldName());
+
+		// Make sure these are set so that the default filter is the lowest
+		// Since its always running and it consumes all information
+		RequestDefaultDisplay defaultFilter = new RequestDefaultDisplay(telnetHelper, dbHelper, uiHandler);
+		addFilter(defaultFilter);
+		// Now request to connect
+		RequestLogin character_login = new RequestLogin (telnetHelper, dbHelper, character);
+		pendingRequests.add(character_login);
+		addFilter(character_login);
+
+		RequestCharacterInformation char_info = new RequestCharacterInformation (telnetHelper, dbHelper, character);
+		pendingRequests.add(char_info);
 	}
 
 	public void processBufferLine(RollingBuffer buffer) {
@@ -92,11 +111,11 @@ public class MainThread extends Thread {
 	}
 
 	private void processThisBufferLine(RollingBuffer buffer, boolean matchFragment) {
-		int i = numberOfFilters;
+		int i = activeFilters.size();
 		while(i > 0) {
 			i--;
-			if(filters[i].parseLine(telnetHelper, buffer)) {
-				if(filters[i].removeFilter()) {
+			if(activeFilters.get(i).parseLine(telnetHelper, buffer)) {
+				if(activeFilters.get(i).removeFilter()) {
 					removeFilter(i);				
 				}
 				i = 0;

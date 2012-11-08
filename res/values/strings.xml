@@ -4,7 +4,7 @@
     <string name="app_hello">Welcome to LensClient</string>
 
     <string name="menu_connect">Connect</string>
-    <string name="menu_disconnect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
     <string name="menu_sysmenu">System Menu</string>
     <string name="menu_help">Help LensClient</string>
     
@@ -14,9 +14,11 @@
     <string name="worldport">Port: </string>
 
     <string name="charactername">Character: </string>
+    <string name="characternamehint">name</string>
     <string name="characterworld">World: </string>
     <string name="characterchooseworld">Select World</string>
     <string name="characterpassword">Password: </string>
+    <string name="characterpasswordhint">password</string>
 
     <string name="characterlevel">Level: </string>
     <string name="charactersex">Sex: </string>
