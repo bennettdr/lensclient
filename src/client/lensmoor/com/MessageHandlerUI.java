@@ -17,6 +17,9 @@ import android.widget.TextView;
 import android.widget.ScrollView;
 
 public class MessageHandlerUI extends Handler {
+	public static final int INPUTMESSAGE = 1;
+	public static final int SCROLLMESSAGE = 2;
+
 	private static final Pattern ansiMatch = Pattern.compile("\\e\\[(\\d+\\;)*\\d+?m");
 	private static final Pattern numberMatch = Pattern.compile("\\d+");
 
@@ -36,22 +39,30 @@ public class MessageHandlerUI extends Handler {
 		String tokenized_fields[];
 		SpannableString  spannable_fragment;
 
-		message_string = msg.obj.toString();
-		// Handle Ansi Coding
-		tokenized_fields = message_string.split("\\e\\[(\\d+\\;)*\\d+?m");
-		Matcher ansiParse = ansiMatch.matcher(message_string);
-		
-		for(int i = 0; i < tokenized_fields.length; i++) {
-			if(tokenized_fields[i].length() > 0) {
-				spannable_fragment = spanAnsiCodes(tokenized_fields[i], lastAnsiCode);
-				outputBox.append(spannable_fragment);
-			}
-			if(ansiParse.find()) {
-				lastAnsiCode = ansiParse.group();
-				ansiParse.region(ansiParse.end(), message_string.length());
-			}
+		switch(msg.what) {
+			case INPUTMESSAGE:
+				message_string = msg.obj.toString();
+				// Handle Ansi Coding
+				tokenized_fields = message_string.split("\\e\\[(\\d+\\;)*\\d+?m");
+				Matcher ansiParse = ansiMatch.matcher(message_string);
+
+				for(int i = 0; i < tokenized_fields.length; i++) {
+					if(tokenized_fields[i].length() > 0) {
+						spannable_fragment = spanAnsiCodes(tokenized_fields[i], lastAnsiCode);
+						outputBox.append(spannable_fragment);
+					}
+					if(ansiParse.find()) {
+						lastAnsiCode = ansiParse.group();
+						ansiParse.region(ansiParse.end(), message_string.length());
+					}
+				}
+				// scroll screen
+				sendMessage(obtainMessage(SCROLLMESSAGE));
+				break;
+			case SCROLLMESSAGE:
+				scrollView.scrollTo(0, outputBox.getHeight());
+				break;
 		}
-		scrollView.scrollTo(0, outputBox.getHeight());
 	}
 
 	private SpannableString spanAnsiCodes(String text, String ansiCode) {

@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.text.Editable;
 import android.view.inputmethod.InputMethodManager;
 import android.view.KeyEvent;
@@ -16,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -26,7 +25,7 @@ import android.database.sqlite.*;
 
 public class LensClientActivity extends Activity implements OnClickListener, DialogInterface.OnDismissListener, OnEditorActionListener {
 	private LensClientSavedState savedState;
-	private Handler uiHandler;
+	private MessageHandlerUI uiHandler;
 	private MainThread mainThread;
 	private TextView activecharacter;
 	private TextView outputbox;
@@ -38,12 +37,7 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		activecharacter = (TextView)findViewById(R.id.activecharacter);
-		activecharacter.setOnClickListener(this);
-		outputbox = (TextView)findViewById(R.id.outputbox);
-		inputbox = (EditText)findViewById(R.id.inputbox);
-    	inputbox.setOnEditorActionListener(this);
-		inputbox.setVisibility(View.INVISIBLE);
+		setupViews();
 
 		outputbox.setText("Android Socket\n");
 		dbHelper = new LensClientDBHelper(this);
@@ -132,6 +126,22 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
     			DisplayCharacter displayCharacter = new DisplayCharacter(dbHelper, this, character);
     			displayCharacter.show();
 				break;
+			case R.id.directionNorthwest:
+			case R.id.directionNorth:
+			case R.id.directionNortheast:
+			case R.id.directionWest:
+			case R.id.directionUp:
+			case R.id.directionDown:
+			case R.id.directionEast:
+			case R.id.directionSouthwest:
+			case R.id.directionSouth:
+			case R.id.directionSoutheast:
+				ImageButton direction = (ImageButton)view;
+				try {
+					telnetHelper.addOutputString(direction.getContentDescription().toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 	}
 	
@@ -142,6 +152,40 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 			e.printStackTrace();
 		}
 	}
+	private void setupViews() {
+		// Direction views
+		ImageButton direction;
+		direction = (ImageButton)findViewById(R.id.directionNorthwest);
+		direction.setOnClickListener(this);
+		direction = (ImageButton)findViewById(R.id.directionNorth);
+		direction.setOnClickListener(this);
+		direction = (ImageButton)findViewById(R.id.directionNortheast);
+		direction.setOnClickListener(this);
+		direction = (ImageButton)findViewById(R.id.directionWest);
+		direction.setOnClickListener(this);
+		direction = (ImageButton)findViewById(R.id.directionUp);
+		direction.setOnClickListener(this);
+		direction = (ImageButton)findViewById(R.id.directionDown);
+		direction.setOnClickListener(this);
+		direction = (ImageButton)findViewById(R.id.directionEast);
+		direction.setOnClickListener(this);
+		direction = (ImageButton)findViewById(R.id.directionSouthwest);
+		direction.setOnClickListener(this);
+		direction = (ImageButton)findViewById(R.id.directionSouth);
+		direction.setOnClickListener(this);
+		direction = (ImageButton)findViewById(R.id.directionSoutheast);
+		direction.setOnClickListener(this);
+		// Character
+		activecharacter = (TextView)findViewById(R.id.activecharacter);
+		activecharacter.setOnClickListener(this);
+		
+		// Text Boxes (telnet style)
+		outputbox = (TextView)findViewById(R.id.outputbox);
+		inputbox = (EditText)findViewById(R.id.inputbox);
+		inputbox.setOnEditorActionListener(this);
+		inputbox.setVisibility(View.INVISIBLE);
+	}
+
 
 	@Override
 	public void onDismiss(DialogInterface dialog) {

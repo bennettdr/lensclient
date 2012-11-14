@@ -11,10 +11,21 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int door=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int ok_e=0x7f020002;
+        public static final int ok_n=0x7f020003;
+        public static final int ok_ne=0x7f020004;
+        public static final int ok_nw=0x7f020005;
+        public static final int ok_s=0x7f020006;
+        public static final int ok_se=0x7f020007;
+        public static final int ok_sw=0x7f020008;
+        public static final int ok_w=0x7f020009;
+        public static final int stairs_down=0x7f02000a;
+        public static final int stairs_up=0x7f02000b;
     }
     public static final class id {
-        public static final int activecharacter=0x7f050051;
+        public static final int activecharacter=0x7f05005b;
         public static final int character_cancelbutton=0x7f05000a;
         public static final int character_deletebutton=0x7f05000b;
         public static final int character_savebutton=0x7f050009;
@@ -76,16 +87,26 @@ public final class R {
         public static final int characterworldtext=0x7f050004;
         public static final int dialogcharacter=0x7f050000;
         public static final int dialogworld=0x7f05000c;
+        public static final int directionDown=0x7f050056;
+        public static final int directionEast=0x7f050057;
+        public static final int directionNorth=0x7f050052;
+        public static final int directionNortheast=0x7f050053;
+        public static final int directionNorthwest=0x7f050051;
+        public static final int directionSouth=0x7f050059;
+        public static final int directionSoutheast=0x7f05005a;
+        public static final int directionSouthwest=0x7f050058;
+        public static final int directionUp=0x7f050055;
+        public static final int directionWest=0x7f050054;
         public static final int filler=0x7f050008;
-        public static final int inputbox=0x7f050053;
-        public static final int itemconnect=0x7f050054;
-        public static final int itemsystemmenu=0x7f050055;
+        public static final int inputbox=0x7f05005d;
+        public static final int itemconnect=0x7f05005e;
+        public static final int itemsystemmenu=0x7f05005f;
         public static final int lensclientlist=0x7f050050;
         public static final int lensclientlistbox=0x7f05004d;
         public static final int lensclientlistitem=0x7f05004e;
         public static final int lensclientselecteditem=0x7f05004f;
-        public static final int menu_help=0x7f050056;
-        public static final int outputbox=0x7f050052;
+        public static final int menu_help=0x7f050060;
+        public static final int outputbox=0x7f05005c;
         public static final int world_cancelbutton=0x7f05001a;
         public static final int world_deletebutton=0x7f05001b;
         public static final int world_savebutton=0x7f050019;
@@ -151,15 +172,23 @@ public final class R {
         public static final int charactertrains=0x7f040019;
         public static final int characterwisdom=0x7f04001a;
         public static final int characterworld=0x7f04000c;
+        public static final int east=0x7f040038;
         public static final int menu_connect=0x7f040002;
         public static final int menu_disconnect=0x7f040003;
         public static final int menu_help=0x7f040005;
         public static final int menu_sysmenu=0x7f040004;
+        public static final int north=0x7f040037;
+        public static final int northeast=0x7f040036;
+        public static final int northwest=0x7f040035;
+        public static final int south=0x7f04003b;
+        public static final int southeast=0x7f04003c;
+        public static final int southwest=0x7f04003a;
         public static final int sysmenu_editworld=0x7f040032;
         public static final int sysmenu_loaddb=0x7f040033;
         public static final int sysmenu_openworld=0x7f040031;
         public static final int sysmenu_savedb=0x7f040034;
         public static final int sysmenu_selectcharacter=0x7f040030;
+        public static final int west=0x7f040039;
         public static final int worldip=0x7f040008;
         public static final int worldname=0x7f040006;
         public static final int worldport=0x7f040009;

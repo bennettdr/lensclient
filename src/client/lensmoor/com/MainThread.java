@@ -4,19 +4,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 
 import android.os.Looper;
-import android.os.Handler;
 import android.os.HandlerThread;
 
 public class MainThread extends Thread {
 	private LensClientDBHelper dbHelper;
 	private LensClientTelnetHelper telnetHelper;
-	private Handler messageLoopHandler;
-	private Handler uiHandler;
+	private MessageHandlerLoop messageLoopHandler;
+	private MessageHandlerUI uiHandler;
 	private boolean running;
 	private ArrayList<Request> pendingRequests;
 	private ArrayList<InterfaceInboundFilter>activeFilters;
 	
-	public MainThread(LensClientDBHelper db_helper, LensClientTelnetHelper telnet_helper, Handler handler) {
+	public MainThread(LensClientDBHelper db_helper, LensClientTelnetHelper telnet_helper, MessageHandlerUI handler) {
 		super("Main Thread");
 		dbHelper = db_helper;
 		telnetHelper = telnet_helper;
@@ -88,7 +87,7 @@ public class MainThread extends Thread {
 
 		// Make sure these are set so that the default filter is the lowest
 		// Since its always running and it consumes all information
-		RequestDefaultDisplay defaultFilter = new RequestDefaultDisplay(telnetHelper, dbHelper, uiHandler);
+		RequestDefaultDisplay defaultFilter = new RequestDefaultDisplay(telnetHelper, dbHelper, messageLoopHandler);
 		addFilter(defaultFilter);
 		// Now request to connect
 		RequestLogin character_login = new RequestLogin (telnetHelper, dbHelper, character);

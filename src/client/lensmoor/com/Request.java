@@ -8,16 +8,16 @@ abstract class Request implements InterfaceInboundFilter {
 	private boolean started;
 	private boolean complete;
 	
-	void OutboundRequest() {
-		started = true;
-	}
-
 	public Request (LensClientTelnetHelper telnetHelper, LensClientDBHelper dbHelper) {
 		this.telnetHelper = telnetHelper;
 		this.dbHelper = dbHelper;
 		this.numberMatches = 0;
 		this.complete = false;
 		this.started = false;
+	}
+
+	void OutboundRequest() {
+		started = true;
 	}
 
 	private String strip(String inputString, String regex) {

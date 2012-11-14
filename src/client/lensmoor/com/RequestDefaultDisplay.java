@@ -5,9 +5,9 @@ import android.os.Handler;
 public class RequestDefaultDisplay extends Request {
 	static final int DEFAULTDISPLAY_PARSER_SIZE = 0;
 	
-	Handler messageLoopHandler;
+	MessageHandlerLoop messageLoopHandler;
 	
-	public RequestDefaultDisplay (LensClientTelnetHelper telnetHelper, LensClientDBHelper dbHelper, Handler messageLoopHandler) {
+	public RequestDefaultDisplay (LensClientTelnetHelper telnetHelper, LensClientDBHelper dbHelper, MessageHandlerLoop messageLoopHandler) {
 		super(telnetHelper, dbHelper);
 		this.messageLoopHandler = messageLoopHandler; 
 		setParser(null, DEFAULTDISPLAY_PARSER_SIZE);

@@ -9,9 +9,9 @@ public class MessageHandlerLoop extends Handler {
 	public static final int INPUTMESSAGE = 2;
 
 	LensClientTelnetHelper telnetHelper;
-	Handler uiHandler;
+	MessageHandlerUI uiHandler;
 	
-	public MessageHandlerLoop (Looper looper, LensClientTelnetHelper telnet_helper, Handler ui_handler) {
+	public MessageHandlerLoop (Looper looper, LensClientTelnetHelper telnet_helper, MessageHandlerUI ui_handler) {
 		super(looper);
 		telnetHelper = telnet_helper;
 		uiHandler = ui_handler;
@@ -28,7 +28,7 @@ public class MessageHandlerLoop extends Handler {
 				break;
 			case INPUTMESSAGE:
 				// Send the message to the screen
-				uiHandler.sendMessage(uiHandler.obtainMessage(MessageHandlerLoop.INPUTMESSAGE, message_string));
+				uiHandler.sendMessage(uiHandler.obtainMessage(MessageHandlerUI.INPUTMESSAGE, message_string));
 				break;
 		}
 	}

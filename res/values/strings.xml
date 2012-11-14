@@ -59,5 +59,14 @@
     <string name="sysmenu_editworld">Edit World</string>
     <string name="sysmenu_loaddb">Load Database</string>
     <string name="sysmenu_savedb">Save Database</string>
- 
+
+	<string name="northwest">Northwest</string>
+    <string name="northeast">Northeast</string>
+    <string name="north">North</string>
+	<string name="east">East</string>
+	<string name="west">West</string>
+	<string name="southwest">Southwest</string>
+	<string name="south">South</string>
+	<string name="southeast">Southeast</string>
+
 </resources>
