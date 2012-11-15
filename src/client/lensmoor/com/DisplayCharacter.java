@@ -53,7 +53,7 @@ public class DisplayCharacter extends Dialog implements View.OnClickListener {
 			worldTextView.setText(character.getCharacterWorld());
 
 			TextView levelTextView = (TextView)view.findViewById(R.id.characterlevelvalue);
-			levelTextView.setText(Integer.toString(character.getLevel()));
+			levelTextView.setText(character.getLevelAsString());
 			TextView sexTextView = (TextView)view.findViewById(R.id.charactersexvalue);
 			sexTextView.setText(character.getSex().toString());
 			TextView raceTextView = (TextView)view.findViewById(R.id.characterracevalue);

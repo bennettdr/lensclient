@@ -109,4 +109,36 @@ public class Character extends LensClientSerializedObject {
 	public String getCharacterWorldString() {
 		return (getCharacterName() + " (" + getCharacterWorld() + ")");
 	}
+	
+	public void setLevel(String levelString, String stepString) {
+		String step_level;
+		int level;
+		int step;
+		
+		level = 0;
+		if(levelString.equalsIgnoreCase("HERO")) {
+			level = -100;
+		} else if (levelString.equalsIgnoreCase("SAGE")) {
+			level = -1000;					
+		}
+		if (level < 0) {
+			step_level = stepString.substring(1, stepString.length() - 1);
+			step = Integer.parseInt(step_level);
+			this.level = level - step;
+		} else {
+			this.level = level;
+		}
+	}
+	
+	public String getLevelAsString() {
+		String level_string;
+		if (level < -999) {
+			level_string = "SAGE (" + Integer.toString(-1 * (level + 1000)) + ")";
+		} else if (level < -99) {
+			level_string = "HERO (" + Integer.toString(-1 * (level + 100)) + ")";
+		} else {
+			level_string = Integer.toString(level);
+		}
+		return level_string;
+	}
 }

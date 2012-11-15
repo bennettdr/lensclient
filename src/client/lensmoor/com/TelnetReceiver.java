@@ -23,7 +23,7 @@ public class TelnetReceiver implements Runnable {
 	@Override
 	public void run() {
 		char c;
-		// TODO Auto-generated method stub
+
 		try {
 			while (true)
 			{ 

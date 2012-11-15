@@ -24,6 +24,8 @@ public class MainThread extends Thread {
 		pendingRequests = new ArrayList<Request>();
 	}
 
+	MessageHandlerLoop getMessageLoopHandler() { return messageLoopHandler; }
+	
 	public void addFilter(Request new_filter) {
 		activeFilters.add(new_filter);
 		new_filter.OutboundRequest();

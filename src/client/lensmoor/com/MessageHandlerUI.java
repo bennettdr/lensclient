@@ -17,9 +17,6 @@ import android.widget.TextView;
 import android.widget.ScrollView;
 
 public class MessageHandlerUI extends Handler {
-	public static final int INPUTMESSAGE = 1;
-	public static final int SCROLLMESSAGE = 2;
-
 	private static final Pattern ansiMatch = Pattern.compile("\\e\\[(\\d+\\;)*\\d+?m");
 	private static final Pattern numberMatch = Pattern.compile("\\d+");
 
@@ -40,7 +37,7 @@ public class MessageHandlerUI extends Handler {
 		SpannableString  spannable_fragment;
 
 		switch(msg.what) {
-			case INPUTMESSAGE:
+			case MessageHandlerLoop.INPUTMESSAGE:
 				message_string = msg.obj.toString();
 				// Handle Ansi Coding
 				tokenized_fields = message_string.split("\\e\\[(\\d+\\;)*\\d+?m");
@@ -57,10 +54,28 @@ public class MessageHandlerUI extends Handler {
 					}
 				}
 				// scroll screen
-				sendMessage(obtainMessage(SCROLLMESSAGE));
+				sendMessage(obtainMessage(MessageHandlerLoop.SCROLLTEXTTOBOTTOMMESSAGE));
 				break;
-			case SCROLLMESSAGE:
+			case MessageHandlerLoop.SCROLLTEXTTOBOTTOMMESSAGE:
 				scrollView.scrollTo(0, outputBox.getHeight());
+				break;
+			case MessageHandlerLoop.CHANGEROOMMESSAGE:
+				Room room = (Room)msg.obj;
+				String string;
+				int i;
+				outputBox.append("Room:" + room.getTitle());
+				outputBox.append("\n");
+				for(i = 0; (string = room.getDescription(i)) != null; i++) {
+					outputBox.append("Description:" + string);
+				}
+				outputBox.append("\n");
+				for(i = 0; (string = room.getObjects(i)) != null; i++) {
+					outputBox.append("Objects:" + string);
+				}
+				for(i = 0; (string = room.getMobiles(i)) != null; i++) {
+					outputBox.append("Mobs:" + string);
+				}
+				//sendMessage(obtainMessage(MessageHandlerLoop.SCROLLTEXTTOBOTTOMMESSAGE));
 				break;
 		}
 	}

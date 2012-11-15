@@ -63,6 +63,7 @@ public class RequestCharacterInformation extends Request {
 		String raw_input_line = buffer.readString();
 		String input_line = stripAnsiCodes(raw_input_line);
 		String month;
+		String level_string;
 		int lineCode;
 		int exp;
 		int exp_to_level;
@@ -72,9 +73,16 @@ public class RequestCharacterInformation extends Request {
 		switch (lineCode) {
 			case CHARINFO_NAME_LINE:
 				character.setCharacterName(getField(input_line, lineCode, 1));
-				character.setLevel(getIntField(input_line, lineCode, 3));
-				character.setSex(EnumSex.getSex(getField(input_line, lineCode, 5)));
-				character.setRace(EnumRace.getRace(getField(input_line, lineCode, 7), false));
+				level_string = getField(input_line, lineCode,3);
+				if(level_string.equalsIgnoreCase("HERO") || level_string.equalsIgnoreCase("SAGE")) {
+					character.setLevel(level_string, getField(input_line, lineCode, 4));
+					character.setSex(EnumSex.getSex(getField(input_line, lineCode, 6)));
+					character.setRace(EnumRace.getRace(getField(input_line, lineCode, 8), false));
+				} else {
+					character.setLevel(getIntField(input_line, lineCode, 3));
+					character.setSex(EnumSex.getSex(getField(input_line, lineCode, 5)));
+					character.setRace(EnumRace.getRace(getField(input_line, lineCode, 7), false));
+				}
 				break;
 			case CHARINFO_SIZE_LINE:
 				character.setSize(EnumSize.getSize(getField(input_line, lineCode, 1)));

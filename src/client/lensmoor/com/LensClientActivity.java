@@ -137,6 +137,8 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 			case R.id.directionSouth:
 			case R.id.directionSoutheast:
 				ImageButton direction = (ImageButton)view;
+				//RequestRoomDisplay roomDisplay = new RequestRoomDisplay(telnetHelper, dbHelper, mainThread.getMessageLoopHandler());;
+				//mainThread.addFilter(roomDisplay);
 				try {
 					telnetHelper.addOutputString(direction.getContentDescription().toString());
 				} catch (Exception e) {

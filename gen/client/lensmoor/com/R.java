@@ -25,7 +25,7 @@ public final class R {
         public static final int stairs_up=0x7f02000b;
     }
     public static final class id {
-        public static final int activecharacter=0x7f05005b;
+        public static final int activecharacter=0x7f05005d;
         public static final int character_cancelbutton=0x7f05000a;
         public static final int character_deletebutton=0x7f05000b;
         public static final int character_savebutton=0x7f050009;
@@ -85,6 +85,8 @@ public final class R {
         public static final int characterwisdomvalue=0x7f050033;
         public static final int characterworldlabel=0x7f050003;
         public static final int characterworldtext=0x7f050004;
+        public static final int currentroom=0x7f05005b;
+        public static final int currentroomdesc=0x7f05005c;
         public static final int dialogcharacter=0x7f050000;
         public static final int dialogworld=0x7f05000c;
         public static final int directionDown=0x7f050056;
@@ -98,15 +100,15 @@ public final class R {
         public static final int directionUp=0x7f050055;
         public static final int directionWest=0x7f050054;
         public static final int filler=0x7f050008;
-        public static final int inputbox=0x7f05005d;
-        public static final int itemconnect=0x7f05005e;
-        public static final int itemsystemmenu=0x7f05005f;
+        public static final int inputbox=0x7f05005f;
+        public static final int itemconnect=0x7f050060;
+        public static final int itemsystemmenu=0x7f050061;
         public static final int lensclientlist=0x7f050050;
         public static final int lensclientlistbox=0x7f05004d;
         public static final int lensclientlistitem=0x7f05004e;
         public static final int lensclientselecteditem=0x7f05004f;
-        public static final int menu_help=0x7f050060;
-        public static final int outputbox=0x7f05005c;
+        public static final int menu_help=0x7f050062;
+        public static final int outputbox=0x7f05005e;
         public static final int world_cancelbutton=0x7f05001a;
         public static final int world_deletebutton=0x7f05001b;
         public static final int world_savebutton=0x7f050019;

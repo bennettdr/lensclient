@@ -7,6 +7,8 @@ import android.os.Message;
 public class MessageHandlerLoop extends Handler {
 	public static final int OUTPUTMESSAGE = 1;
 	public static final int INPUTMESSAGE = 2;
+	public static final int CHANGEROOMMESSAGE = 3;
+	public static final int SCROLLTEXTTOBOTTOMMESSAGE = 4;
 
 	LensClientTelnetHelper telnetHelper;
 	MessageHandlerUI uiHandler;
@@ -27,8 +29,9 @@ public class MessageHandlerLoop extends Handler {
 				telnetHelper.write(message_string);
 				break;
 			case INPUTMESSAGE:
+			case CHANGEROOMMESSAGE:
 				// Send the message to the screen
-				uiHandler.sendMessage(uiHandler.obtainMessage(MessageHandlerUI.INPUTMESSAGE, message_string));
+				uiHandler.sendMessage(uiHandler.obtainMessage(msg.what, message_string));
 				break;
 		}
 	}

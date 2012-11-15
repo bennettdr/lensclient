@@ -1,7 +1,5 @@
 package client.lensmoor.com;
 
-import android.os.Handler;
-
 public class RequestDefaultDisplay extends Request {
 	static final int DEFAULTDISPLAY_PARSER_SIZE = 0;
 	
