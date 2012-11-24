@@ -179,7 +179,7 @@ public class TableCharacter extends Table {
 		characterList[i].setIsNull();
 		return characterList;
 	}
-	
+
 	public void SaveCharacter(SQLiteDatabase db, Character character) {
 		ContentValues values = new ContentValues(CHARACTER_NUMBER_COLUMNS);
 		String whereClause;

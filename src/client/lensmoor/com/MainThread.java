@@ -35,6 +35,8 @@ public class MainThread extends Thread {
 		activeFilters.remove(filter_offset);
 	}
 
+	public void endThread() { running = false; }
+
 	public void run() {
 		// Set up message handling
 		String read_string;
@@ -78,6 +80,7 @@ public class MainThread extends Thread {
 				}
 			}
 		}
+		message_thread.quit();
 	}
 	
 	private void startUpRequests() {

@@ -25,8 +25,8 @@ abstract class Request implements InterfaceInboundFilter {
 		String output_string;
 
 		token_list = inputString.split(regex);
-		output_string = token_list[0];
-		for(int i = 1; i < token_list.length; i++) {
+		output_string = "";
+		for(int i = 0; i < token_list.length; i++) {
 			output_string = output_string + token_list[i];
 		}
 		return(output_string);

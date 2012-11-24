@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.content.Context;
 import android.view.*;
 import android.view.ViewGroup.LayoutParams;
-import android.content.DialogInterface;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class DisplayCharacter extends Dialog implements View.OnClickListener {
@@ -18,15 +15,15 @@ public class DisplayCharacter extends Dialog implements View.OnClickListener {
 
 	public DisplayCharacter(LensClientDBHelper dbHelper, Context context, int theme, Character character) {
 		super(context, theme);
-		InitializeDialogCharacter(dbHelper, context, character);
+		InitDisplayCharacter(dbHelper, context, character);
 	}
 
 	public DisplayCharacter(LensClientDBHelper dbHelper, Context context, Character character) {
 		super(context);
-		InitializeDialogCharacter(dbHelper, context, character);
+		InitDisplayCharacter(dbHelper, context, character);
 	}
 	
-	public void InitializeDialogCharacter(LensClientDBHelper dbHelper, Context context, Character character) {
+	public void InitDisplayCharacter(LensClientDBHelper dbHelper, Context context, Character character) {
 		this.context = context;
 		this.dbHelper = dbHelper;
 		if (character == null) {

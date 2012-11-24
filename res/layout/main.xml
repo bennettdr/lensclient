@@ -8,6 +8,21 @@
 		android:layout_width="fill_parent"
         android:layout_height="wrap_content"
 	    android:orientation="horizontal" >
+        <Button android:id="@+id/channelInfo"
+			android:layout_width="wrap_content"
+    	    android:layout_height="30dp"
+    	    android:textSize="10dp"
+            android:text="@string/channelInfo" />
+        <Button android:id="@+id/channelQuest"
+			android:layout_width="wrap_content"
+    	    android:layout_height="30dp"
+    	    android:textSize="10dp"
+            android:text="@string/channelQuest" />
+        </LinearLayout>
+    <LinearLayout
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
 		<RelativeLayout
 	    	android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"

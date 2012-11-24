@@ -9,6 +9,7 @@ public class TelnetReceiver implements Runnable {
 	private final int ANSISTATE_NOSTATE = 0;
 	private final int ANSISTATE_ESCAPESEEN = 1;
 	private final int ANSISTATE_BRACKETSEEN = 2;
+	boolean running;
 	private int char_recieved;
 	LensClientTelnetHelper telnetHelper;
 	StringBuffer ansiCode;
@@ -18,14 +19,17 @@ public class TelnetReceiver implements Runnable {
 	public TelnetReceiver(LensClientTelnetHelper telnet_helper) {
 		telnetHelper = telnet_helper;
 		ansiCode = new StringBuffer();
+		running = true;
 	}
-	
+
+	public void endThread() { running = false; }
+
 	@Override
 	public void run() {
 		char c;
 
 		try {
-			while (true)
+			while (running)
 			{ 
 				char_recieved = telnetHelper.read();					
 				c = (char)char_recieved;

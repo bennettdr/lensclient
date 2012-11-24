@@ -15,8 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.content.DialogInterface;
@@ -30,8 +31,11 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 	private TextView activecharacter;
 	private TextView outputbox;
 	private EditText inputbox;
+	private DisplayChannel activeChannel;
 	private LensClientTelnetHelper telnetHelper;
 	private LensClientDBHelper dbHelper;
+	
+	public DisplayChannel getActiveChannel() { return activeChannel; }
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,24 +84,27 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
     	switch (item.getItemId()) {
     		case R.id.itemconnect :
     			if ((telnetHelper != null) && telnetHelper.isConnected()) {
+    				telnetHelper.write("quit");
     				item.setTitle(R.string.menu_connect);
     				inputbox.setVisibility(View.INVISIBLE);
     				try {
     					telnetHelper.disconnect();
 					} catch (Exception e) {
 						e.printStackTrace();
-					}    	
+					}
+    				mainThread.endThread();
+    				setVisibility(View.INVISIBLE);
     				return true;
     			}
 				item.setTitle(R.string.menu_disconnect);
-				inputbox.setVisibility(View.VISIBLE);
+				setVisibility(View.VISIBLE);
     			outputbox.setText("Connecting...\n");
     			savedState = LensClientSavedState.GetSavedState(dbHelper);
     			if(savedState.getSavedWorldName().length() > 0) {
     				World world = dbHelper.GetWorld(savedState.getSavedWorldName());
         			// Set the telnet and ui interfaces up
     				telnetHelper = new LensClientTelnetHelper(world);
-    				uiHandler = new MessageHandlerUI(this.getMainLooper(), outputbox);
+    				uiHandler = new MessageHandlerUI(this.getMainLooper(), this);
     				// Initialize the main thread
     				mainThread = new MainThread(dbHelper, telnetHelper, uiHandler);
     				// Startup
@@ -137,13 +144,22 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 			case R.id.directionSouth:
 			case R.id.directionSoutheast:
 				ImageButton direction = (ImageButton)view;
-				//RequestRoomDisplay roomDisplay = new RequestRoomDisplay(telnetHelper, dbHelper, mainThread.getMessageLoopHandler());;
-				//mainThread.addFilter(roomDisplay);
+				RequestRoomDisplay roomDisplay = new RequestRoomDisplay(telnetHelper, dbHelper, mainThread.getMessageLoopHandler());;
+				mainThread.addFilter(roomDisplay);
 				try {
 					telnetHelper.addOutputString(direction.getContentDescription().toString());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				break;
+			case R.id.channelInfo:
+				activeChannel = new DisplayChannel(telnetHelper, dbHelper, uiHandler, this, EnumChannel.INFO);
+				activeChannel.show();
+				break;
+			case R.id.channelQuest:
+				activeChannel = new DisplayChannel(telnetHelper, dbHelper, uiHandler, this, EnumChannel.QUEST);
+				activeChannel.show();
+				break;
 		}
 	}
 	
@@ -185,13 +201,66 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 		outputbox = (TextView)findViewById(R.id.outputbox);
 		inputbox = (EditText)findViewById(R.id.inputbox);
 		inputbox.setOnEditorActionListener(this);
-		inputbox.setVisibility(View.INVISIBLE);
+		
+		// Channel Support
+		Button channel;
+		activeChannel = null;
+		channel = (Button)findViewById(R.id.channelInfo);
+		channel.setOnClickListener(this);
+		channel = (Button)findViewById(R.id.channelQuest);
+		channel.setOnClickListener(this);		
+
+		setVisibility(View.INVISIBLE);
 	}
 
 
+	private void setVisibility(int visibility) {
+		Button channel;
+		ImageButton direction;
+		TextView view;
+		
+		// Direction buttons
+		direction = (ImageButton)findViewById(R.id.directionNorthwest);
+		direction.setVisibility(visibility);
+		direction = (ImageButton)findViewById(R.id.directionNorth);
+		direction.setVisibility(visibility);
+		direction = (ImageButton)findViewById(R.id.directionNortheast);
+		direction.setVisibility(visibility);
+		direction = (ImageButton)findViewById(R.id.directionWest);
+		direction.setVisibility(visibility);
+		direction = (ImageButton)findViewById(R.id.directionUp);
+		direction.setVisibility(visibility);
+		direction = (ImageButton)findViewById(R.id.directionDown);
+		direction.setVisibility(visibility);
+		direction = (ImageButton)findViewById(R.id.directionEast);
+		direction.setVisibility(visibility);
+		direction = (ImageButton)findViewById(R.id.directionSouthwest);
+		direction.setVisibility(visibility);
+		direction = (ImageButton)findViewById(R.id.directionSouth);
+		direction.setVisibility(visibility);
+		direction = (ImageButton)findViewById(R.id.directionSoutheast);
+		direction.setVisibility(visibility);
+		// Input Box
+		inputbox.setVisibility(visibility);
+		// Channels
+		channel = (Button)findViewById(R.id.channelInfo);
+		channel.setVisibility(visibility);
+		channel = (Button)findViewById(R.id.channelQuest);
+		channel.setVisibility(visibility);
+		// Room
+		view = (TextView)findViewById(R.id.currentroomdesc);
+		view.setVisibility(visibility);
+		view = (TextView)findViewById(R.id.currentroom);
+		view.setVisibility(visibility);		
+	}
+	
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		activecharacter.invalidate();
+		if(activeChannel == null) {
+			activecharacter.invalidate();
+		} else {
+			activeChannel = null;
+		}
 	}
 
 	@Override

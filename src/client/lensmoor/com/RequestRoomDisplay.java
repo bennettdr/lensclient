@@ -1,14 +1,18 @@
 package client.lensmoor.com;
 
+import android.os.Message;
+import android.os.Bundle;
+
 public class RequestRoomDisplay extends Request {
 	static final int DEFAULTDISPLAY_PARSER_SIZE = 0;
 	static final int STATE_TITLE = 0;
-	static final int STATE_EMPTY_LINE = 1;
-	static final int STATE_DESCRIPTION = 2;
-	static final int STATE_2ND_EMPTY_LINE = 3;
-	static final int STATE_EXITS = 4;
-	static final int STATE_OBJECTS = 5;
-	static final int STATE_MOBILES = 6;
+	static final int STATE_EMPTY_LINE = STATE_TITLE + 1;
+	static final int STATE_DESCRIPTION = STATE_EMPTY_LINE + 1;
+	static final int STATE_2ND_EMPTY_LINE = STATE_DESCRIPTION + 1;
+	static final int STATE_EXITS = STATE_2ND_EMPTY_LINE + 1;
+	static final int STATE_OBJECTS = STATE_EXITS + 1;
+	static final int STATE_MOBILES = STATE_OBJECTS + 1;
+	static final int STATE_DONE = STATE_MOBILES + 1;
 
 	private boolean inNewRoom;
 	private int currentState;
@@ -40,7 +44,7 @@ public class RequestRoomDisplay extends Request {
 		switch(currentState) {
 			case STATE_TITLE:
 				room = new Room();
-				room.setDescription(input_line);
+				room.setTitle(input_line);
 				currentState++;
 				break;
 			case STATE_EMPTY_LINE:
@@ -48,7 +52,7 @@ public class RequestRoomDisplay extends Request {
 				break;
 			case STATE_DESCRIPTION:
 				stripped_input_line = stripAnsiCodes(input_line);
-				if(stripped_input_line.charAt(0) == '\n') {
+				if((stripped_input_line.length() == 0) || (stripped_input_line.charAt(0) == '\n')) {
 					currentState++;
 					currentState++;
 				} else {
@@ -67,28 +71,34 @@ public class RequestRoomDisplay extends Request {
 						(stripped_input_line.charAt(3) == ' ') &&
 						(stripped_input_line.charAt(4) == ' ')) {
 					room.setObjects(input_line);
-				} else if ((stripped_input_line.charAt(0) == ' ') &&
-						(stripped_input_line.charAt(1) == '(')) {
+				} else if (stripped_input_line.charAt(0) == '(') {
 					room.setMobiles(input_line);
 					currentState++;
 				} else {
-					currentState = 0;
-					input_buffer.insertString(input_line);
-					return false;
+					currentState = STATE_DONE;
 				}
 				break;
 			case STATE_MOBILES:
 				stripped_input_line = stripAnsiCodes(input_line);
-				if ((stripped_input_line.charAt(0) == ' ') &&
-						(input_line.charAt(1) == '(')) {
+				if (stripped_input_line.charAt(0) == '(') {
 					room.setMobiles(input_line);
 				} else {
-					currentState = 0;
-					input_buffer.insertString(input_line);
-					messageLoopHandler.obtainMessage(MessageHandlerLoop.CHANGEROOMMESSAGE, room);
-					return false;
+					currentState = STATE_DONE;
 				}
 				break;
+		}
+
+		if (currentState == STATE_DONE) {
+			// Push back extra line onto buffer
+			input_buffer.insertString(input_line);
+			// Tell display to paint room
+			Bundle room_data = new Bundle();
+			room_data.putParcelable("client.lensmoor.com.Room", room);
+			Message msg =  messageLoopHandler.obtainMessage(MessageHandlerLoop.CHANGEROOMMESSAGE);
+			msg.setData(room_data);
+			messageLoopHandler.sendMessage(msg);
+			// Remove this filter (return true will remove this filer)
+			setComplete();			
 		}
 		return true;
 	}

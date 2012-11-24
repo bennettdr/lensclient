@@ -9,75 +9,121 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.BackgroundColorSpan;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ScrollView;
 
 public class MessageHandlerUI extends Handler {
 	private static final Pattern ansiMatch = Pattern.compile("\\e\\[(\\d+\\;)*\\d+?m");
 	private static final Pattern numberMatch = Pattern.compile("\\d+");
+	private static final String defaultAnsiCode = "\27[0;40;37m";
 
+	private LensClientActivity activity;
 	private ScrollView scrollView;
 	private TextView outputBox;
+	private TextView roomName;
+	private TextView roomDesription;
 	private boolean bold;
-	private String lastAnsiCode = "\27[0;40;37m";
+	private String lastAnsiCode;
+	private Button infoChannel;
+	private Button questChannel;
 
-	public MessageHandlerUI(Looper looper, TextView output_box) {
+	public MessageHandlerUI(Looper looper, LensClientActivity activity) {
 		super(looper);
-		outputBox = output_box;
+		this.activity = activity;
+		
+		// set up channels
+		infoChannel = (Button)activity.findViewById(R.id.channelInfo);
+		questChannel = (Button)activity.findViewById(R.id.channelQuest);
+	
+		outputBox = (TextView)activity.findViewById(R.id.outputbox);
+		roomName = (TextView)activity.findViewById(R.id.currentroom);
+		roomDesription = (TextView)activity.findViewById(R.id.currentroomdesc);
 		scrollView = (ScrollView)outputBox.getParent();
+		lastAnsiCode = defaultAnsiCode;
 	}
 	@Override
 	public void handleMessage(Message msg) {
 		String message_string;
-		String tokenized_fields[];
-		SpannableString  spannable_fragment;
 
 		switch(msg.what) {
 			case MessageHandlerLoop.INPUTMESSAGE:
 				message_string = msg.obj.toString();
 				// Handle Ansi Coding
-				tokenized_fields = message_string.split("\\e\\[(\\d+\\;)*\\d+?m");
-				Matcher ansiParse = ansiMatch.matcher(message_string);
-
-				for(int i = 0; i < tokenized_fields.length; i++) {
-					if(tokenized_fields[i].length() > 0) {
-						spannable_fragment = spanAnsiCodes(tokenized_fields[i], lastAnsiCode);
-						outputBox.append(spannable_fragment);
-					}
-					if(ansiParse.find()) {
-						lastAnsiCode = ansiParse.group();
-						ansiParse.region(ansiParse.end(), message_string.length());
-					}
-				}
+				lastAnsiCode = addAnsiCompliantStringToView(outputBox, message_string, lastAnsiCode);
 				// scroll screen
 				sendMessage(obtainMessage(MessageHandlerLoop.SCROLLTEXTTOBOTTOMMESSAGE));
 				break;
 			case MessageHandlerLoop.SCROLLTEXTTOBOTTOMMESSAGE:
 				scrollView.scrollTo(0, outputBox.getHeight());
 				break;
-			case MessageHandlerLoop.CHANGEROOMMESSAGE:
-				Room room = (Room)msg.obj;
-				String string;
-				int i;
-				outputBox.append("Room:" + room.getTitle());
-				outputBox.append("\n");
-				for(i = 0; (string = room.getDescription(i)) != null; i++) {
-					outputBox.append("Description:" + string);
+			case MessageHandlerLoop.SCROLLCHANNELTOBOTTOMMESSAGE:
+				if(activity != null) {
+					scrollView.scrollTo(0, activity.getActiveChannel().getTextView().getHeight());
 				}
-				outputBox.append("\n");
+				break;
+			case MessageHandlerLoop.CHANGEROOMMESSAGE:
+				String string;
+				String lastAnsiCodeLocal;
+				int i;
+
+				Bundle room_data = msg.getData();
+				Room room = (Room)room_data.getParcelable("client.lensmoor.com.Room");
+				roomName.setText("");
+				addAnsiCompliantStringToView(roomName, room.getTitle(), defaultAnsiCode);
+
+				roomDesription.setText("");
+				lastAnsiCodeLocal = defaultAnsiCode;
+				for(i = 0; (string = room.getDescription(i)) != null; i++) {
+					lastAnsiCodeLocal = addAnsiCompliantStringToView(roomDesription, string, lastAnsiCodeLocal);
+				}
+
+				
+				lastAnsiCodeLocal = defaultAnsiCode;
+				lastAnsiCodeLocal = addAnsiCompliantStringToView(outputBox, room.getExits(0), lastAnsiCodeLocal);
 				for(i = 0; (string = room.getObjects(i)) != null; i++) {
-					outputBox.append("Objects:" + string);
+					lastAnsiCodeLocal = addAnsiCompliantStringToView(outputBox, string, lastAnsiCodeLocal);
 				}
 				for(i = 0; (string = room.getMobiles(i)) != null; i++) {
-					outputBox.append("Mobs:" + string);
+					lastAnsiCodeLocal = addAnsiCompliantStringToView(outputBox, string, lastAnsiCodeLocal);
 				}
-				//sendMessage(obtainMessage(MessageHandlerLoop.SCROLLTEXTTOBOTTOMMESSAGE));
+				sendMessage(obtainMessage(MessageHandlerLoop.SCROLLTEXTTOBOTTOMMESSAGE));
+				break;
+			case MessageHandlerLoop.CHANNELMESSAGE:
+				if(activity != null) {
+					message_string = msg.obj.toString();
+					lastAnsiCodeLocal = defaultAnsiCode;
+					lastAnsiCodeLocal = addAnsiCompliantStringToView(activity.getActiveChannel().getTextView(), message_string, lastAnsiCodeLocal);
+					sendMessage(obtainMessage(MessageHandlerLoop.SCROLLCHANNELTOBOTTOMMESSAGE));
+				}
 				break;
 		}
+	}
+
+	private String addAnsiCompliantStringToView(TextView view, String string, String lastAnsiCode) {
+		String tokenized_fields[];
+		SpannableString  spannable_fragment;
+
+		// Handle Ansi Coding
+		tokenized_fields = string.split("\\e\\[(\\d+\\;)*\\d+?m");
+		Matcher ansiParse = ansiMatch.matcher(string);
+
+		for(int i = 0; i < tokenized_fields.length; i++) {
+			if(tokenized_fields[i].length() > 0) {
+				spannable_fragment = spanAnsiCodes(tokenized_fields[i], lastAnsiCode);
+				view.append(spannable_fragment);
+			}
+			if(ansiParse.find()) {
+				lastAnsiCode = ansiParse.group();
+				ansiParse.region(ansiParse.end(), string.length());
+			}
+		}
+		return lastAnsiCode;		
 	}
 
 	private SpannableString spanAnsiCodes(String text, String ansiCode) {
@@ -115,9 +161,9 @@ public class MessageHandlerUI extends Handler {
 						case 30:
 							// Black
 							if(bold) {
-								color = Color.rgb(128, 128, 128);
+								color = activity.getResources().getColor(R.color.DKGREY);
 							} else {
-								color = Color.rgb(0, 0, 0);
+								color = activity.getResources().getColor(R.color.BLACK);
 							}
 							if(background) {
 								backgroundColor = new BackgroundColorSpan(color);
@@ -131,9 +177,9 @@ public class MessageHandlerUI extends Handler {
 						case 31:
 							// Red
 							if(bold) {
-								color = Color.rgb(255, 0, 0);
+								color = activity.getResources().getColor(R.color.BRIGHTRED);
 							} else {
-								color = Color.rgb(128, 0, 0);
+								color = activity.getResources().getColor(R.color.RED);
 							}
 							if(background) {
 								backgroundColor = new BackgroundColorSpan(color);
@@ -147,9 +193,9 @@ public class MessageHandlerUI extends Handler {
 						case 32:
 							// Green
 							if(bold) {
-								color = Color.rgb(0, 255, 0);
+								color = activity.getResources().getColor(R.color.BRIGHTGREEN);
 							} else {
-								color = Color.rgb(0, 128, 0);
+								color = activity.getResources().getColor(R.color.GREEN);
 							}
 							if(background) {
 								backgroundColor = new BackgroundColorSpan(color);
@@ -163,9 +209,9 @@ public class MessageHandlerUI extends Handler {
 						case 33:
 							// Yellow
 							if(bold) {
-								color = Color.rgb(255, 255, 0);
+								color = activity.getResources().getColor(R.color.BRIGHTYELLOW);
 							} else {
-								color = Color.rgb(128, 128, 0);
+								color = activity.getResources().getColor(R.color.YELLOW);
 							}
 							if(background) {
 								backgroundColor = new BackgroundColorSpan(color);
@@ -179,9 +225,9 @@ public class MessageHandlerUI extends Handler {
 						case 34:
 							// Blue
 							if(bold) {
-								color = Color.rgb(0, 0, 255);
+								color = activity.getResources().getColor(R.color.BRIGHTBLUE);
 							} else {
-								color = Color.rgb(0, 0, 128);
+								color = activity.getResources().getColor(R.color.BLUE);
 							}
 							if(background) {
 								backgroundColor = new BackgroundColorSpan(color);
@@ -195,9 +241,9 @@ public class MessageHandlerUI extends Handler {
 						case 35:
 							// Magenta
 							if(bold) {
-								color = Color.rgb(255, 0, 255);
+								color = activity.getResources().getColor(R.color.BRIGHTMAGENTA);
 							} else {
-								color = Color.rgb(128, 0, 128);
+								color = activity.getResources().getColor(R.color.MAGENTA);
 							}
 							if(background) {
 								backgroundColor = new BackgroundColorSpan(color);
@@ -211,9 +257,9 @@ public class MessageHandlerUI extends Handler {
 						case 36:
 							// Cyan
 							if(bold) {
-								color = Color.rgb(0, 255, 255);
+								color = activity.getResources().getColor(R.color.BRIGHTCYAN);
 							} else {
-								color = Color.rgb(0, 128, 128);
+								color = activity.getResources().getColor(R.color.CYAN);
 							}
 							if(background) {
 								backgroundColor = new BackgroundColorSpan(color);
@@ -227,9 +273,9 @@ public class MessageHandlerUI extends Handler {
 						case 37:
 							// White
 							if(bold) {
-								color = Color.rgb(192, 192, 192);
+								color = activity.getResources().getColor(R.color.BRIGHTWHITE);
 							} else {
-								color = Color.rgb(255, 255, 255);
+								color = activity.getResources().getColor(R.color.WHITE);
 							}
 							if(background) {
 								backgroundColor = new BackgroundColorSpan(color);

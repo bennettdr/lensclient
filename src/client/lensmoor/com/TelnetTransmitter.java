@@ -6,16 +6,21 @@ import android.util.Log;
 
 public class TelnetTransmitter implements Runnable {
 	LensClientTelnetHelper telnetHelper;
+	boolean running;
+	
 
 	public TelnetTransmitter(LensClientTelnetHelper telnet_helper) {
 		telnetHelper = telnet_helper;
+		running = true;
 	}
+
+	public void endThread() { running = false; }
 
 	@Override
 	public void run() {
 		String next_command;
-		// TODO Auto-generated method stub
-		while (true)
+
+		while (running)
 		{
 			next_command = telnetHelper.readOutputString();
 			if(next_command.length() == 0) {

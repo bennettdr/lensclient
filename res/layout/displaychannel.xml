@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogchannel"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:orientation="vertical" >
+
+    <ScrollView android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:fillViewport = "true"
+		android:orientation="vertical"
+		android:layout_weight="1.0" >
+
+	    <TextView android:id="@+id/channeloutputbox"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/app_hello" />
+	</ScrollView>
+
+    <EditText android:id="@+id/channelinputbox" 
+	    android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:inputType="text"
+		android:imeOptions="actionDone" />
+</LinearLayout>
+    

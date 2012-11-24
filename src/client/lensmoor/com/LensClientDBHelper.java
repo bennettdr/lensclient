@@ -23,6 +23,7 @@ public class LensClientDBHelper extends SQLiteOpenHelper {
 		TableWorld.onCreate(database);
 		TableCharacter.onCreate(database);
 		TableConfig.onCreate(database);
+		TableInfoChannel.onCreate(database);
 //		TableCampaign.onCreate(database);
 //		TableVoterCampaignInformation.onCreate(database);
 //		TableAddressCampaign.onCreate(database);
@@ -105,6 +106,17 @@ public class LensClientDBHelper extends SQLiteOpenHelper {
 		TableCharacter characterTable= new TableCharacter(this);
 		characterTable.DeleteCharacter(db, character);		
 	}
+	
+	// Channel Table Operations
+	public ChannelMessage [] GetChannelMessageList (EnumChannel channel) {
+		TableInfoChannel channelInfo = new TableInfoChannel(this);
+		return channelInfo.GetChannelMessageList(db, channel);
+	}
+	public void InsertChannelMessage (ChannelMessage channelMessage) {
+		TableInfoChannel channelInfo = new TableInfoChannel(this);
+		channelInfo.InsertChannelMessage(db, channelMessage);
+	}
+	
 	
 	// Database Helper Routines
 	static public String dbCreateTable(String table, String attributes[], String key[]) {

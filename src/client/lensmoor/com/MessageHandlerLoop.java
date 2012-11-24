@@ -9,6 +9,8 @@ public class MessageHandlerLoop extends Handler {
 	public static final int INPUTMESSAGE = 2;
 	public static final int CHANGEROOMMESSAGE = 3;
 	public static final int SCROLLTEXTTOBOTTOMMESSAGE = 4;
+	public static final int CHANNELMESSAGE = 5;
+	public static final int SCROLLCHANNELTOBOTTOMMESSAGE = 6;
 
 	LensClientTelnetHelper telnetHelper;
 	MessageHandlerUI uiHandler;
@@ -23,15 +25,18 @@ public class MessageHandlerLoop extends Handler {
 	public void handleMessage(Message msg) {
 		String message_string;
 			
-		message_string = msg.obj.toString();
 		switch(msg.what) {
 			case OUTPUTMESSAGE:
+				message_string = msg.obj.toString();
 				telnetHelper.write(message_string);
 				break;
 			case INPUTMESSAGE:
 			case CHANGEROOMMESSAGE:
+			case CHANNELMESSAGE:
 				// Send the message to the screen
-				uiHandler.sendMessage(uiHandler.obtainMessage(msg.what, message_string));
+				Message new_msg = uiHandler.obtainMessage(msg.what, msg.obj);
+				new_msg.setData(msg.getData());
+				uiHandler.sendMessage(new_msg);
 				break;
 		}
 	}

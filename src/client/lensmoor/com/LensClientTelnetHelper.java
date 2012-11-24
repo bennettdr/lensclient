@@ -10,6 +10,8 @@ public class LensClientTelnetHelper {
 	private TelnetClient telnet;
 	private InputStream in;
 	private PrintStream out;
+	private TelnetReceiver receiver;
+	private TelnetTransmitter transmitter;
 	private String host = "75.126.141.202";
 	private int port = 3500;
 	private boolean connected;
@@ -57,8 +59,10 @@ public class LensClientTelnetHelper {
 			in = telnet.getInputStream();
 			out = new PrintStream(telnet.getOutputStream());
 			telnet.setKeepAlive(true);
-			Thread mInputThread = new Thread (new TelnetReceiver(this), "Telnet Receiver");
-			Thread mOutputThread = new Thread (new TelnetTransmitter(this), "Telnet Transmitter");
+			receiver = new TelnetReceiver(this);
+			transmitter = new TelnetTransmitter(this);
+			Thread mInputThread = new Thread (receiver, "Telnet Receiver");
+			Thread mOutputThread = new Thread (transmitter, "Telnet Transmitter");
 			mInputThread.start();
 			mOutputThread.start();
 		} catch (Exception e) {
@@ -70,7 +74,14 @@ public class LensClientTelnetHelper {
 
 	public int read() throws IOException { return in.read(); }
 	public void write(String output_string) { out.println(output_string); out.println("\r"); out.flush(); }
-	public void disconnect() throws IOException { in.close(); out.close(); telnet.disconnect(); connected = false; };
+	public void disconnect() throws IOException {
+		in.close();
+		out.close(); 
+		telnet.disconnect(); 
+		connected = false;
+		receiver.endThread();
+		transmitter.endThread();
+	};
 	public boolean isConnected() { return connected; }
 
 	public RollingBuffer getInputBuffer() { return inputBuffer; }

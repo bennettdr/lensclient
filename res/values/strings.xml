@@ -48,7 +48,10 @@
     <string name="characterplayerdeaths">Player Deaths: </string>
     <string name="characterquestpoints">Quest Points: </string>
     <string name="characterdifficulty">Quest Difficulty: </string>
-    
+
+    <string name="channelInfo">Info</string>
+    <string name="channelQuest">Quest</string>
+
     <string name="button_send">Send</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
