@@ -120,6 +120,8 @@ public class TableConfig extends Table {
 	};
 	private static final String tableName = "ConfigInformation";
 		
+	private static final TableUpdate updateList[] = null;
+
 	public TableConfig(LensClientDBHelper currentDBHelper) {
 		super(currentDBHelper, tableName, columnAttr);
 	}
@@ -127,10 +129,8 @@ public class TableConfig extends Table {
 	public static void onCreate (SQLiteDatabase db) {
 		LensClientDBHelper.initializeTable(db, tableName, columnAttr, keyList, indexList);
 	}
-		
+
 	public static void onUpgrade (SQLiteDatabase db, int newVersion, int oldVersion) {
-		if (newVersion > oldVersion) {
-		//	onCreate(db);
-		}
+		LensClientDBHelper.updateTable(db, newVersion, oldVersion, tableName, columnAttr, keyList, indexList, updateList);
 	}
 }

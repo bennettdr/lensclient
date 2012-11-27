@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import org.apache.commons.net.telnet.TelnetClient;
 
 public class LensClientTelnetHelper {
+	World world;
 	private TelnetClient telnet;
 	private InputStream in;
 	private PrintStream out;
@@ -20,6 +21,7 @@ public class LensClientTelnetHelper {
 	private RollingBuffer outputBuffer;
 
 	public LensClientTelnetHelper(World world) {
+		this.world = world;
 		if(world.getURL().length() > 0) {
 			initializeTelnetClient(world.getURL(), world.getPort());			
 		}
@@ -72,6 +74,7 @@ public class LensClientTelnetHelper {
 		return connected;
 	}
 
+	public String getWorldName() { return world.getWorldName(); }
 	public int read() throws IOException { return in.read(); }
 	public void write(String output_string) { out.println(output_string); out.println("\r"); out.flush(); }
 	public void disconnect() throws IOException {

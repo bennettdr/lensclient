@@ -5,7 +5,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // Android imports
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -47,9 +46,12 @@ public class MessageHandlerUI extends Handler {
 		scrollView = (ScrollView)outputBox.getParent();
 		lastAnsiCode = defaultAnsiCode;
 	}
+	
 	@Override
 	public void handleMessage(Message msg) {
 		String message_string;
+		Button button;
+		EnumChannel channel;
 
 		switch(msg.what) {
 			case MessageHandlerLoop.INPUTMESSAGE:
@@ -95,11 +97,26 @@ public class MessageHandlerUI extends Handler {
 				sendMessage(obtainMessage(MessageHandlerLoop.SCROLLTEXTTOBOTTOMMESSAGE));
 				break;
 			case MessageHandlerLoop.CHANNELMESSAGE:
-				if(activity != null) {
+				if((activity.getActiveChannel() != null) && (activity.getActiveChannel().getChannel().getInt() == msg.arg1)) {
 					message_string = msg.obj.toString();
 					lastAnsiCodeLocal = defaultAnsiCode;
 					lastAnsiCodeLocal = addAnsiCompliantStringToView(activity.getActiveChannel().getTextView(), message_string, lastAnsiCodeLocal);
 					sendMessage(obtainMessage(MessageHandlerLoop.SCROLLCHANNELTOBOTTOMMESSAGE));
+				} else {
+					channel = EnumChannel.getChannel(msg.arg1);
+					button = lookUpByChannel(channel);
+					if(button != null) {
+						button.setBackgroundColor(activity.getResources().getColor(channel.getColorId()));
+						button.setTextColor(activity.getResources().getColor(R.color.BRIGHTWHITE));
+					}
+				}
+				break;
+			case MessageHandlerLoop.CHANNELMESSAGESEEN:
+				channel = EnumChannel.getChannel(msg.arg1);
+				button = lookUpByChannel(channel);
+				if(button != null) {
+					button.setBackgroundColor(activity.getResources().getColor(R.color.BLACK));
+					button.setTextColor(activity.getResources().getColor(channel.getColorId()));
 				}
 				break;
 		}
@@ -295,5 +312,18 @@ public class MessageHandlerUI extends Handler {
 			}
 		}
 		return return_string;
+	}
+	
+	Button lookUpByChannel(EnumChannel channel) {
+		Button button = null;
+		switch(channel) {
+			case INFO:
+				button = infoChannel;
+				break;
+			case QUEST:
+				button = questChannel;
+				break;
+		}
+		return button;
 	}
 }

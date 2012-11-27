@@ -5,12 +5,16 @@ import android.os.Handler;
 import android.os.Message;
 
 public class MessageHandlerLoop extends Handler {
+	// Standard I/O
 	public static final int OUTPUTMESSAGE = 1;
-	public static final int INPUTMESSAGE = 2;
-	public static final int CHANGEROOMMESSAGE = 3;
-	public static final int SCROLLTEXTTOBOTTOMMESSAGE = 4;
-	public static final int CHANNELMESSAGE = 5;
-	public static final int SCROLLCHANNELTOBOTTOMMESSAGE = 6;
+	public static final int INPUTMESSAGE = OUTPUTMESSAGE + 1;
+	public static final int SCROLLTEXTTOBOTTOMMESSAGE = INPUTMESSAGE + 1;
+	// Room I/O
+	public static final int CHANGEROOMMESSAGE = SCROLLTEXTTOBOTTOMMESSAGE + 1;
+	// Channel I/O
+	public static final int CHANNELMESSAGE = CHANGEROOMMESSAGE + 1;
+	public static final int CHANNELMESSAGESEEN = CHANNELMESSAGE + 1;
+	public static final int SCROLLCHANNELTOBOTTOMMESSAGE = CHANNELMESSAGESEEN + 1;
 
 	LensClientTelnetHelper telnetHelper;
 	MessageHandlerUI uiHandler;

@@ -35,14 +35,16 @@ public class RequestDefaultDisplay extends Request {
 
 			switch(lineCode) {
 				case DEFAULTDISPLAY_INFO_LINE:
-					ChannelMessage info_message = new ChannelMessage(getDBHelper(), EnumChannel.INFO);
+					ChannelMessage info_message = new ChannelMessage(getDBHelper(), EnumChannel.INFO, telnetHelper.getWorldName());
 					info_message.setMessage(raw_input_line);
 					getDBHelper().InsertChannelMessage(info_message);
+					messageLoopHandler.sendMessage(messageLoopHandler.obtainMessage(MessageHandlerLoop.CHANNELMESSAGE, EnumChannel.INFO.getInt(), 0, raw_input_line));
 					break;
 				case DEFAULTDISPLAY_QUEST_LINE:
-					ChannelMessage quest_message = new ChannelMessage(getDBHelper(), EnumChannel.QUEST);
+					ChannelMessage quest_message = new ChannelMessage(getDBHelper(), EnumChannel.QUEST, telnetHelper.getWorldName());
 					quest_message.setMessage(raw_input_line);
 					getDBHelper().InsertChannelMessage(quest_message);
+					messageLoopHandler.sendMessage(messageLoopHandler.obtainMessage(MessageHandlerLoop.CHANNELMESSAGE, EnumChannel.QUEST.getInt(), 0, raw_input_line));
 					break;
 				default:
 					messageLoopHandler.sendMessage(messageLoopHandler.obtainMessage(MessageHandlerLoop.INPUTMESSAGE, raw_input_line));

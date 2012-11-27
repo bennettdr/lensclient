@@ -47,6 +47,7 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 		dbHelper = new LensClientDBHelper(this);
 		try {
 			dbHelper.getWritableDatabase();
+			dbHelper.testIt();
 		} catch (SQLiteException e) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Error");
@@ -106,7 +107,7 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
     				telnetHelper = new LensClientTelnetHelper(world);
     				uiHandler = new MessageHandlerUI(this.getMainLooper(), this);
     				// Initialize the main thread
-    				mainThread = new MainThread(dbHelper, telnetHelper, uiHandler);
+    				mainThread = new MainThread(dbHelper, telnetHelper, uiHandler, world);
     				// Startup
     				mainThread.start();
    				}
@@ -207,8 +208,10 @@ public class LensClientActivity extends Activity implements OnClickListener, Dia
 		activeChannel = null;
 		channel = (Button)findViewById(R.id.channelInfo);
 		channel.setOnClickListener(this);
+		channel.setTextColor(getResources().getColor(EnumChannel.INFO.getColorId()));
 		channel = (Button)findViewById(R.id.channelQuest);
 		channel.setOnClickListener(this);		
+		channel.setTextColor(getResources().getColor(EnumChannel.QUEST.getColorId()));
 
 		setVisibility(View.INVISIBLE);
 	}

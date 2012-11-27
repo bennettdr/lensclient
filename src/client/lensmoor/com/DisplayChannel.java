@@ -15,12 +15,12 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 public class DisplayChannel extends Dialog implements View.OnClickListener, OnEditorActionListener {
-	Context context;
-	LensClientDBHelper dbHelper;
-	LensClientTelnetHelper telnetHelper;
-	MessageHandlerUI uiHandler;
-	EnumChannel channel;
-	View view;
+	private Context context;
+	private LensClientDBHelper dbHelper;
+	private LensClientTelnetHelper telnetHelper;
+	private MessageHandlerUI uiHandler;
+	private EnumChannel channel;
+	private View view;
 
 	public DisplayChannel(LensClientTelnetHelper telnetHelper, LensClientDBHelper dbHelper, MessageHandlerUI uiHandler, Context context, int theme, EnumChannel channel) {
 		super(context, theme);
@@ -40,8 +40,9 @@ public class DisplayChannel extends Dialog implements View.OnClickListener, OnEd
 		this.uiHandler = uiHandler;
 	}
 	
-	TextView getTextView() { return (TextView)view.findViewById(R.id.channeloutputbox); }
-	
+	public TextView getTextView() { return (TextView)view.findViewById(R.id.channeloutputbox); }
+	public EnumChannel getChannel() { return channel; }
+
 	@Override	
 	public void onCreate(Bundle savedInstanceState) {
 		int i;
@@ -55,10 +56,11 @@ public class DisplayChannel extends Dialog implements View.OnClickListener, OnEd
 			EditText inputbox = (EditText)view.findViewById(R.id.channelinputbox);
 			inputbox.setOnEditorActionListener(this);
 		}
-		ChannelMessage [] messageList = dbHelper.GetChannelMessageList(channel);
+		ChannelMessage [] messageList = dbHelper.GetChannelMessageList(channel, telnetHelper.getWorldName());
 		for (i = 0; i < messageList.length; i++) {
 			uiHandler.sendMessage(uiHandler.obtainMessage(MessageHandlerLoop.CHANNELMESSAGE, messageList[i].getFormattedMessage()));
 		}
+		uiHandler.sendMessage(uiHandler.obtainMessage(MessageHandlerLoop.CHANNELMESSAGESEEN, channel.getInt(), 0));
 	}
 
 	@Override

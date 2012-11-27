@@ -39,6 +39,8 @@ public class TableSavedState extends Table {
 	};
 	private static final String tableName = "LensClientState";
 	
+	private static final TableUpdate updateList[] = null;
+	
 	public TableSavedState(LensClientDBHelper currentDBHelper) {
 		super(currentDBHelper, tableName, columnAttr);
 	}
@@ -48,9 +50,7 @@ public class TableSavedState extends Table {
 	}
 		
 	public static void onUpgrade (SQLiteDatabase db, int newVersion, int oldVersion) {
-		if (newVersion > oldVersion) {
-			onCreate(db);
-		}
+		LensClientDBHelper.updateTable(db, newVersion, oldVersion, tableName, columnAttr, keyList, indexList, updateList);
 	}
 	
 	public LensClientSavedState GetSavedState(SQLiteDatabase db, String worldName) throws SQLException {

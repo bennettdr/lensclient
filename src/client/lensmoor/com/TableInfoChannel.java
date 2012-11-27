@@ -6,7 +6,8 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 public class TableInfoChannel extends Table {
-	private static final int CHANNELINFO_CHANNEL_COL = 0;
+	private static final int CHANNELINFO_WORLD_COL = 0;
+	private static final int CHANNELINFO_CHANNEL_COL = CHANNELINFO_WORLD_COL + 1;
 	private static final int CHANNELINFO_TIME_COL =  CHANNELINFO_CHANNEL_COL + 1;
 	private static final int CHANNELINFO_MESSAGE_COL =  CHANNELINFO_TIME_COL + 1;
 	private static final int CHANNELINFO_DATE_CREATED_COL = CHANNELINFO_MESSAGE_COL + 1;
@@ -16,6 +17,7 @@ public class TableInfoChannel extends Table {
 	private static final int CHANNELINFO_NUMBER_COLUMNS = CHANNELINFO_USER_UPDATED_COL + 1;
 
 	private static final String columnAttr[] = {
+		"World", "TEXT", null,
 		"Channel", "TEXT", null,
 		"Time", "INTEGER", null,
 		"Message", "TEXT", null,
@@ -26,6 +28,7 @@ public class TableInfoChannel extends Table {
 		null
 	};
 	private static final String keyList[] = {
+		"World",
 		"Channel",
 		"DateCreated",
 		"Time",
@@ -35,6 +38,9 @@ public class TableInfoChannel extends Table {
 		null
 	};
 	private static final String tableName = "InfoChannelMessages";
+	
+	private static final TableUpdate updateList[] = { new TableUpdate(2, "DELETE FROM " + tableName)  };
+
 
 	public TableInfoChannel(LensClientDBHelper currentDBHelper) {
 		super(currentDBHelper, tableName, columnAttr);
@@ -45,20 +51,19 @@ public class TableInfoChannel extends Table {
 	}
 		
 	public static void onUpgrade (SQLiteDatabase db, int newVersion, int oldVersion) {
-		if (newVersion > oldVersion) {
-		//	onCreate(db);
-		}
+		LensClientDBHelper.updateTable(db, newVersion, oldVersion, tableName, columnAttr, keyList, indexList, updateList);
 	}
 
 	// Database Support
-	public ChannelMessage[] GetChannelMessageList(SQLiteDatabase db, EnumChannel channel) {
+	public ChannelMessage[] GetChannelMessageList(SQLiteDatabase db, EnumChannel channel, String world) {
 		ChannelMessage [] messageList;
 		String whereClause = null;
 		Cursor cursor;
 		int i = 0;
 		int countAddresses;
 
-		whereClause = "(" + columnList[CHANNELINFO_CHANNEL_COL] + " = \"" + channel.getString() + "\")";
+		whereClause = "((" + columnList[CHANNELINFO_WORLD_COL] + " = \"" + world + "\")";
+		whereClause += " AND (" + columnList[CHANNELINFO_CHANNEL_COL] + " = \"" + channel.getString() + "\"))";
 		countAddresses = (int)DatabaseUtils.longForQuery(db, "SELECT COUNT(*) FROM " + tableName + " WHERE " + whereClause, null);
 
 		messageList = new ChannelMessage[countAddresses + 1];
@@ -68,7 +73,7 @@ public class TableInfoChannel extends Table {
 		if(cursor != null) {
 			cursor.moveToFirst();
 			while(!cursor.isAfterLast()) {
-				messageList[i] = new ChannelMessage(dbHelper, channel);
+				messageList[i] = new ChannelMessage(dbHelper, channel, world);
 				messageList[i].setTime(cursor.getInt(cursor.getColumnIndex(columnList[CHANNELINFO_TIME_COL])));
 				messageList[i].setMessage(cursor.getString(cursor.getColumnIndex(columnList[CHANNELINFO_MESSAGE_COL])));
 				messageList[i].setDateCreated(cursor.getLong(cursor.getColumnIndex(columnList[CHANNELINFO_DATE_CREATED_COL])));
@@ -80,7 +85,7 @@ public class TableInfoChannel extends Table {
 			}
 			cursor.close();
 		}
-		messageList[i] = new ChannelMessage(dbHelper, channel);
+		messageList[i] = new ChannelMessage(dbHelper, channel, world);
 		messageList[i].setIsNull();
 		return messageList;
 	}
@@ -92,6 +97,7 @@ public class TableInfoChannel extends Table {
 			return;
 		}
 
+		values.put(columnList[CHANNELINFO_WORLD_COL], channelMessage.getChannel().getString());
 		values.put(columnList[CHANNELINFO_CHANNEL_COL], channelMessage.getChannel().getString());
 		values.put(columnList[CHANNELINFO_TIME_COL], channelMessage.getTime());
 		values.put(columnList[CHANNELINFO_MESSAGE_COL], channelMessage.getMessage());
@@ -100,5 +106,5 @@ public class TableInfoChannel extends Table {
 		values.put(columnList[CHANNELINFO_DATE_UPDATED_COL], channelMessage.getDateUpdated());
 		values.put(columnList[CHANNELINFO_USER_UPDATED_COL], channelMessage.getUserUpdate());
 		db.insert(tableName, null, values);			
-	}	
+	}
 }

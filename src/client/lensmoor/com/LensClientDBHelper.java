@@ -2,12 +2,13 @@ package client.lensmoor.com;
 
 //Android Imports
 import android.content.*;
+import android.database.Cursor;
 import android.database.sqlite.*;
 
 public class LensClientDBHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "LensmoorClient.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private static final int DB_MAX_RETURNED_ROWS = 500;
 	
 	private SQLiteDatabase db;
@@ -24,21 +25,17 @@ public class LensClientDBHelper extends SQLiteOpenHelper {
 		TableCharacter.onCreate(database);
 		TableConfig.onCreate(database);
 		TableInfoChannel.onCreate(database);
-//		TableCampaign.onCreate(database);
-//		TableVoterCampaignInformation.onCreate(database);
-//		TableAddressCampaign.onCreate(database);
 	}
 	
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-//		TableVoter.onUpgrade(database, oldVersion, newVersion);
-//		TableAddress.onUpgrade(database, oldVersion, newVersion);
-//		TableCampaign.onUpgrade(db, newVersion, oldVersion);
-//		TableSavedState.onUpgrade(database, newVersion, oldVersion);
-//		TableVoterCampaignInformation.onUpgrade(database, newVersion, oldVersion);
-//		TableAddressCampaign.onCreate(database);
+		TableSavedState.onUpgrade(database, newVersion, oldVersion);
+		TableWorld.onUpgrade(database, newVersion, oldVersion);
+		TableCharacter.onUpgrade(database, newVersion, oldVersion);
+		TableConfig.onUpgrade(database, newVersion, oldVersion);
+		TableInfoChannel.onUpgrade(database, newVersion, oldVersion);
 	}
-	
+
 	@Override
 	public void onOpen(SQLiteDatabase database) {
 		db = database;
@@ -54,6 +51,9 @@ public class LensClientDBHelper extends SQLiteOpenHelper {
 		return db.getPath();
 	}
 
+	public void testIt() {
+		onCreate(db);
+	}
 //	public void MarkAddressAsSeen(long addressReferenceNumber, boolean talkedWith) {
 //		TableAddressCampaign addressCampaignTable = new TableAddressCampaign(this);
 //		addressCampaignTable.MarkAddressAsSeen(db, addressReferenceNumber, talkedWith);
@@ -108,9 +108,9 @@ public class LensClientDBHelper extends SQLiteOpenHelper {
 	}
 	
 	// Channel Table Operations
-	public ChannelMessage [] GetChannelMessageList (EnumChannel channel) {
+	public ChannelMessage [] GetChannelMessageList (EnumChannel channel, String world) {
 		TableInfoChannel channelInfo = new TableInfoChannel(this);
-		return channelInfo.GetChannelMessageList(db, channel);
+		return channelInfo.GetChannelMessageList(db, channel, world);
 	}
 	public void InsertChannelMessage (ChannelMessage channelMessage) {
 		TableInfoChannel channelInfo = new TableInfoChannel(this);
@@ -123,7 +123,7 @@ public class LensClientDBHelper extends SQLiteOpenHelper {
 		String createString;
 		int i = 0;
 		
-		createString = "CREATE TABLE " + table + " (";
+		createString = "CREATE TABLE IF NOT EXISTS " + table + " (";
 		while(attributes[i] != null) {
 			if(i > 0) {
 				createString = createString + ",";
@@ -191,6 +191,86 @@ public class LensClientDBHelper extends SQLiteOpenHelper {
 			createIndexStatement = LensClientDBHelper.dbCreateIndex(tableName, i, indexList[i]);
 			db.execSQL(createIndexStatement);
 		}
+	}
+
+	public static void updateTable (SQLiteDatabase db, int newVersion, int oldVersion, String tableName, String [] columnAttr, String [] keyList, String [][] indexList, TableUpdate [] updateList) {
+		String createTableStatement;
+		String backupTableStatement;
+		String createIndexStatement;
+		String copyTableStatement;
+		String deleteTableStatement;
+		String columns;
+		int start_updates;
+		int i;
+		
+		// This table has not been updated ever
+		if(updateList == null) {
+			return;
+		}
+		// This table hasn't been updated since the current version
+		for(i = 0, start_updates = -1; start_updates == -1 && i < updateList.length; i++) {
+			if(updateList[i].getVersion() > oldVersion) {
+				start_updates = i;
+			}
+		}
+		if(start_updates == -1) {
+			return;
+		}
+
+		db.beginTransaction();
+		// Create table if does not exist to ensure no failures
+		createTableStatement = LensClientDBHelper.dbCreateTable(tableName, columnAttr, keyList);
+		db.execSQL(createTableStatement);
+		// Find columns from orignal (old) table
+		columns = LensClientDBHelper.GetColumns(db, tableName);
+		// Backup table
+		backupTableStatement = "ALTER TABLE " + tableName + " RENAME TO temp_" + tableName;
+		db.execSQL(backupTableStatement);
+		// Create table final table w/indexes
+		createTableStatement = LensClientDBHelper.dbCreateTable(tableName, columnAttr, keyList);
+		db.execSQL(createTableStatement);
+		for(i = 0; indexList[i] != null; i++) {
+			createIndexStatement = LensClientDBHelper.dbCreateIndex(tableName, i, indexList[i]);
+			db.execSQL(createIndexStatement);
+		}
+		// Copy date from original
+		if(columns != null) {
+			copyTableStatement = "INSERT INTO " + tableName + " (" + columns + ") SELECT " + columns + " FROM temp_" + tableName;
+			db.execSQL(copyTableStatement);
+		}
+		// Remove backup table
+		deleteTableStatement = "DROP TABLE temp_" + tableName;
+		db.execSQL(deleteTableStatement);
+		// Do table updates
+		for(i = start_updates; i < updateList.length; i++) {
+			if(updateList[i].getUpdateStatement() != null) {
+				db.execSQL(updateList[i].getUpdateStatement());
+			}
+		}
+		db.setTransactionSuccessful();
+		db.endTransaction();
+	}
+
+	public static String GetColumns(SQLiteDatabase db, String tableName) {
+	    String columns = null;
+	    Cursor columnFetch = null;
+	    try {
+	    	columnFetch = db.rawQuery("select * from " + tableName + " limit 1", null);
+	        if (columnFetch != null) {
+        		columns = columnFetch.getColumnName(0);
+	            for(int i = 1; i < columnFetch.getColumnCount(); i++) {
+	            	columns = columns + "," + columnFetch.getColumnName(i);
+	            }
+	        }
+	    } catch (Exception e) {
+	    	LogWriter.write(EnumLogType.SYSTEM, e.getMessage());
+	        e.printStackTrace();
+	    } finally {
+	        if (columnFetch != null) {
+	        	columnFetch.close();
+	        }
+	    }
+	    return columns;
 	}
 
 	static public int dbQueryMaxRowLimit() {

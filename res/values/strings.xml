@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LensClient</string>
-    <string name="app_hello">Welcome to LensClient</string>
+    <string name="app_name">LensClient v0.9</string>
+    <string name="app_hello">Welcome to LensClient v0.9</string>
 
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>

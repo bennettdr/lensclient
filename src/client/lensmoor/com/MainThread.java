@@ -15,7 +15,7 @@ public class MainThread extends Thread {
 	private ArrayList<Request> pendingRequests;
 	private ArrayList<InterfaceInboundFilter>activeFilters;
 	
-	public MainThread(LensClientDBHelper db_helper, LensClientTelnetHelper telnet_helper, MessageHandlerUI handler) {
+	public MainThread(LensClientDBHelper db_helper, LensClientTelnetHelper telnet_helper, MessageHandlerUI handler, World world) {
 		super("Main Thread");
 		dbHelper = db_helper;
 		telnetHelper = telnet_helper;

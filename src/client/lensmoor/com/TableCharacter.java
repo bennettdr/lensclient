@@ -94,6 +94,8 @@ public class TableCharacter extends Table {
 		null
 	};
 	private static final String tableName = "CharacterInformation";
+	
+	private static final TableUpdate updateList[] = null;
 
 	public TableCharacter(LensClientDBHelper currentDBHelper) {
 		super(currentDBHelper, tableName, columnAttr);
@@ -104,9 +106,7 @@ public class TableCharacter extends Table {
 	}
 		
 	public static void onUpgrade (SQLiteDatabase db, int newVersion, int oldVersion) {
-		if (newVersion > oldVersion) {
-		//	onCreate(db);
-		}
+		LensClientDBHelper.updateTable(db, newVersion, oldVersion, tableName, columnAttr, keyList, indexList, updateList);
 	}
 
 	// Database Support
